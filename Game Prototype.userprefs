@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\MouseControllers\PlayerTurnCardMouseController.cs">
+    <Files>
+      <File FileName="Assets\Scripts\MouseControllers\PlayerTurnCardMouseController.cs" Line="38" Column="69" />
+      <File FileName="Assets\Scripts\StateMachine\GameStateController.cs" Line="47" Column="4" />
+      <File FileName="Assets\Scripts\MouseControllers\PlayerTurnSquareMouseController.cs" Line="33" Column="7" />
+      <File FileName="Assets\Scripts\CardController.cs" Line="316" Column="5" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MouseControllers\CardMouseController.cs" Line="14" Column="9" />
+      <File FileName="Assets\Scripts\Battlefield.cs" Line="60" Column="66" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
