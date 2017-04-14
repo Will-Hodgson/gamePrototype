@@ -22,7 +22,7 @@ namespace Assets.Scripts
 			var selectedCard = this._gameStateController.selectedCard;
 			if (selectedCard != null) {
 				var cardController = selectedCard.GetComponent<CardController>();
-				if (cardController.ownedBy == Owner.PLAYER && this._gameStateController.State() == "PlayerTurnState") {
+				if (cardController.ownedBy == Owner.PLAYER && this._gameStateController.currentState == GameState.PLAYERTURN) {
 					var moveSquares = cardController.SquaresInMoveDistance();
 					var attackSquares = cardController.SquaresInAttackDistance();
 
