@@ -2,37 +2,38 @@
 
 namespace Assets.Scripts
 {
-	public class EnemyTurnState2 : State {
+    public class EnemyTurnState2 : State
+    {
+        private State _nextState;
 
-		private State _nextState;
+        void Awake()
+        {
+            this._nextState = GameObject.Find("Camera").GetComponent<PlayerTurnState1>();
+        }
 
-		public void Start()
-		{
-			this._nextState = GameObject.Find("Camera").GetComponent<PlayerTurnState1>();
-		}
+        public override void Enter()
+        {
 
-		public override void Enter()
-		{
+        }
 
-		}
-
-		public override void Execute()
-		{
+        public override void Execute()
+        {
 			
-		}
+        }
 
-		public override void Exit()
-		{
+        public override void Exit()
+        {
 			
-		}
+        }
 
-		public override State NextState() {
-			return this._nextState;
-		}
+        public override State NextState()
+        {
+            return this._nextState;
+        }
 
-		public override string Id()
-		{
-			return "EnemyTurnState2";
-		}
-	}
+        public override string Id()
+        {
+            return "EnemyTurnState2";
+        }
+    }
 }

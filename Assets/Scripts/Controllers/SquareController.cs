@@ -4,11 +4,23 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-	public class SquareController : MonoBehaviour
+    public class SquareController : MonoBehaviour
     {
-		public int[] battlefieldLocation { get; set; }
-		public CardController card { get; set; }
-	
+        private int[] _battlefieldLocation;
+        private CardController _cardController;
+
+        public int[] battlefieldLocation
+        {
+            get { return this._battlefieldLocation; } 
+            set { this._battlefieldLocation = value; }
+        }
+
+        public CardController card
+        {
+            get { return this._cardController; }
+            set { this._cardController = value; }
+        }
+
         public void Init(int[] location)
         {
             this.battlefieldLocation = location;
