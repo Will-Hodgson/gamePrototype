@@ -3,14 +3,8 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-	public enum GameState {
-		MULLIGAN,
-		PLAYERTURN,
-		ENEMYTURN
-	};
-
 	public class GameStateController : MonoBehaviour {
-		private GameState _currentState;
+		private State _currentState;
 		private Battlefield _battlefield;
 		private Transform _selectedCard;
 		private Transform _selectedCardPanel;
@@ -20,17 +14,20 @@ namespace Assets.Scripts
 			set { this._selectedCard = value; }
 		}
 
-		public GameState currentState {
+		public State currentState {
 			get { return this._currentState; }
 			private set { this._currentState = value; }
 		}
 
 		public void Start() 
 		{
-			this._currentState = GameState.MULLIGAN;
+			this._currentState = GameObject.Find("Camera").GetComponent<MulliganState>();
 			this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
 			this._selectedCard = null;
 			this._selectedCardPanel = GameObject.Find("SelectedCardPanel").transform;
+
+			this._currentState.Enter();
+			this._currentState.Execute();
 		}
 
 		public void ChangeState() {
@@ -45,16 +42,15 @@ namespace Assets.Scripts
 				square.gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
 			}
 
-			if (this._currentState == GameState.PLAYERTURN) {
-				this._currentState = GameState.ENEMYTURN;
-			} else {
-				this._currentState = GameState.PLAYERTURN;
-			}
+			this._currentState.Exit();
+			this._currentState = this._currentState.NextState();
+			this._currentState.Enter();
+			this._currentState.Execute();
 		}
 
 		public void UpdateText() 
 		{
-			GameObject.Find("Button/Text").GetComponent<Text>().text = this._currentState.ToString();
+			GameObject.Find("Button/Text").GetComponent<Text>().text = this._currentState.Id();
 		}
 	}
 }

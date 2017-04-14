@@ -8,21 +8,21 @@ namespace Assets.Scripts
 	public class SquareMouseController : MonoBehaviour, IPointerDownHandler {
 
 		private Battlefield _battlefield;
-		private GameStateController _gameStateController;
+		private GameStateController _gameState;
 		private Transform _selectedCardPanel;
 
 		public void Start() 
 		{
 			this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
-			this._gameStateController = GameObject.Find("Camera").GetComponent<GameStateController>();
+			this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
 			this._selectedCardPanel = GameObject.Find("SelectedCardPanel").transform;
 		}
 
 		public void OnPointerDown(PointerEventData data) {
-			var selectedCard = this._gameStateController.selectedCard;
+			var selectedCard = this._gameState.selectedCard;
 			if (selectedCard != null) {
 				var cardController = selectedCard.GetComponent<CardController>();
-				if (cardController.ownedBy == Owner.PLAYER && this._gameStateController.currentState == GameState.PLAYERTURN) {
+				if (cardController.ownedBy == Owner.PLAYER && (this._gameState.currentState.Id() == "PlayerTurnState1" || this._gameState.currentState.Id() == "PlayerTurnState2")) {
 					var moveSquares = cardController.SquaresInMoveDistance();
 					var attackSquares = cardController.SquaresInAttackDistance();
 
@@ -48,7 +48,7 @@ namespace Assets.Scripts
 					foreach (Transform child in this._selectedCardPanel) {
 						Destroy(child.gameObject);
 					}
-					this._gameStateController.selectedCard = null;
+					this._gameState.selectedCard = null;
 				}
 			}
 		}
