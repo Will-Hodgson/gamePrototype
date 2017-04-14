@@ -27,6 +27,8 @@ namespace Assets.Scripts
         private Owner _ownedBy;
         private Location _boardLocation;
         private Transform _square;
+        private bool _canMove;
+        private bool _canAttack;
 
         public Owner ownedBy
         { 
@@ -46,12 +48,26 @@ namespace Assets.Scripts
             set { this._square = value; }
         }
 
+        public bool canMove
+        {
+            get { return this._canMove; }
+            set { this._canMove = value; }
+        }
+
+        public bool canAttack
+        {
+            get { return this._canMove; }
+            set { this._canMove = value; }
+        }
+
         void Awake()
         {
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._cardData = this.GetComponent<CardData>();
             this.boardLocation = Location.DECK;
             this.square = null;
+            this.canMove = false;
+            this.canAttack = false;
         }
 
         public void Init(Owner owner)
@@ -90,9 +106,15 @@ namespace Assets.Scripts
 
         public void MoveCard(Transform square)
         {
+            if (this._canMove == false)
+            {
+                Debug.LogWarning("Trying to move a card that has already moved this turn");
+                return;
+            }
             if (this.boardLocation != Location.BATTLEFIELD && this.boardLocation != Location.HAND)
             {
                 Debug.LogWarning("Card is not on the battlefield or in your hand!");
+                return;
             }
             if (square.gameObject.GetComponent<SquareController>().card != null)
             {

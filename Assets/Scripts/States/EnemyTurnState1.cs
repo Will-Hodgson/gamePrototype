@@ -7,6 +7,7 @@ namespace Assets.Scripts
     {
         private State _nextState;
         private GameStateController _gameState;
+        private Battlefield _battlefield;
         private EnemyDeckController _deckController;
         private Text _stateButtonText;
 
@@ -14,6 +15,7 @@ namespace Assets.Scripts
         {
             this._nextState = GameObject.Find("Camera").GetComponent<EnemyAttackState>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
+            this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._deckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<EnemyDeckController>();
             this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
         }
@@ -22,16 +24,31 @@ namespace Assets.Scripts
         {
             this._stateButtonText.text = this.Id();
             this._gameState.enemyMana = this._gameState.enemyManaMax;
+            this._deckController.DrawCard();
         }
 
         public override void Execute()
         {
-            this._deckController.DrawCard();
+            foreach (Transform card in this._battlefield.cards)
+            {
+                CardController cardController = card.gameObject.GetComponent<CardController>();
+                if (cardController.ownedBy == Owner.ENEMY)
+                {
+                    cardController.canMove = true;
+                }
+            }
         }
 
         public override void Exit()
         {
-
+            foreach (Transform card in this._battlefield.cards)
+            {
+                CardController cardController = card.gameObject.GetComponent<CardController>();
+                if (cardController.ownedBy == Owner.ENEMY)
+                {
+                    cardController.canMove = false;
+                }
+            }
         }
 
         public override State NextState()
