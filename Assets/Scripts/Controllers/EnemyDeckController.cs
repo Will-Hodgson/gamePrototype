@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-    public class DeckController : MonoBehaviour
+    public class EnemyDeckController : MonoBehaviour
     {
         [SerializeField] private Transform _cardPrefab;
         private List<Transform> _cards;
@@ -19,8 +19,8 @@ namespace Assets.Scripts
                 var obj = card.gameObject;
                 obj.GetComponent<CanvasGroup>().alpha = 0f;
                 obj.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                obj.GetComponent<CardController>().Init(Owner.PLAYER);
-                card.SetParent(GameObject.Find("PlayerDeckPanel/PlayerDeck").transform);
+                obj.GetComponent<CardController>().Init(Owner.ENEMY);
+                card.SetParent(GameObject.Find("EnemyDeckPanel/EnemyDeck").transform);
                 this._cards.Add(card);
             }
         }
@@ -32,11 +32,10 @@ namespace Assets.Scripts
             var cardController = this._cards[0].gameObject.GetComponent<CardController>();
             this._cards.RemoveAt(0);
             cardController.DrawCard();
-            cardController.gameObject.AddComponent<CardMouseController>();
-            cardController.gameObject.transform.SetParent(GameObject.Find("PlayerHand").transform);
+            cardController.gameObject.AddComponent<EnemyCardMouseController>();
+            cardController.gameObject.transform.SetParent(GameObject.Find("EnemyHand").transform);
             cardController.transform.localScale = (new Vector3(1, 1, 1));
             cardController.gameObject.GetComponent<CanvasGroup>().alpha = 1f;
-            cardController.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
             if (this._cards.Count == 0)
             {
                 this.gameObject.GetComponentInChildren<Text>().text = "EMPTY";
@@ -48,7 +47,7 @@ namespace Assets.Scripts
             var cardController = card.gameObject.GetComponent<CardController>();
             cardController.ReplaceCard();
             this._cards.Add(card);
-            Destroy(cardController.gameObject.GetComponent<CardMouseController>());
+            Destroy(cardController.gameObject.GetComponent<EnemyCardMouseController>());
             cardController.gameObject.transform.SetParent(this.gameObject.transform);
             cardController.transform.localScale = (new Vector3(1, 1, 1));
             cardController.gameObject.GetComponent<CanvasGroup>().alpha = 0f;

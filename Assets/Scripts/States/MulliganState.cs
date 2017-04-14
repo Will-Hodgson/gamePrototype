@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace Assets.Scripts
@@ -7,24 +8,36 @@ namespace Assets.Scripts
     {
         private State _nextState;
         private GameStateController _gameState;
-        private DeckController _deckController;
+        private PlayerDeckController _playerDeckController;
+        private EnemyDeckController _enemyDeckController;
         private Transform _playerHand;
-        private Transform _mulliganButton;
-        private Transform _keepCardsButton;
+        private Transform _enemyHand;
+        private Text _stateButtonText;
+        private Transform _playerMulliganButton;
+        private Transform _playerKeepCardsButton;
+        private Transform _enemyMulliganButton;
+        private Transform _enemyKeepCardsButton;
+        private bool _playerButtonClicked = false;
+        private bool _enemyButtonClicked = false;
 
         void Awake()
         {
             this._nextState = GameObject.Find("Camera").GetComponent<PlayerTurnState1>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
-            this._deckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<DeckController>();
+            this._playerDeckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<PlayerDeckController>();
+            this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<EnemyDeckController>();
             this._playerHand = GameObject.Find("PlayerHand").transform;
-            this._mulliganButton = GameObject.Find("MulliganButton").transform;
-            this._keepCardsButton = GameObject.Find("KeepCardsButton").transform;
+            this._enemyHand = GameObject.Find("EnemyHand").transform;
+            this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
+            this._playerMulliganButton = GameObject.Find("PlayerMulliganButton").transform;
+            this._playerKeepCardsButton = GameObject.Find("PlayerKeepCardsButton").transform;
+            this._enemyMulliganButton = GameObject.Find("EnemyMulliganButton").transform;
+            this._enemyKeepCardsButton = GameObject.Find("EnemyKeepCardsButton").transform;
         }
 
         public override void Enter()
         {
-
+            this._stateButtonText.text = this.Id();
         }
 
         public override void Execute()
@@ -32,16 +45,15 @@ namespace Assets.Scripts
             // Draw 7 cards
             for (int i = 0; i < 7; i++)
             {
-                this._deckController.DrawCard();
+                this._playerDeckController.DrawCard();
+                this._enemyDeckController.DrawCard();
             }
-
-            // Place Mulligan Button
+                
         }
 
         public override void Exit()
         {
-            this._mulliganButton.gameObject.SetActive(false);
-            this._keepCardsButton.gameObject.SetActive(false);
+
         }
 
         public override State NextState()
@@ -49,7 +61,7 @@ namespace Assets.Scripts
             return this._nextState;
         }
 
-        public void Mulligan()
+        public void PlayerMulligan()
         {
             List<Transform> temp = new List<Transform>();
             foreach (Transform card in this._playerHand)
@@ -59,20 +71,76 @@ namespace Assets.Scripts
 
             foreach (Transform card in temp)
             {
-                this._deckController.ReplaceCard(card);
+                this._playerDeckController.ReplaceCard(card);
             }
 
             // Draw 7 cards
             for (int i = 0; i < 7; i++)
             {
-                this._deckController.DrawCard();
+                this._playerDeckController.DrawCard();
             }
-            this._gameState.ChangeState();
+
+            this._playerMulliganButton.gameObject.SetActive(false);
+            this._playerKeepCardsButton.gameObject.SetActive(false);
+
+            this._playerButtonClicked = true;
+            if (this._enemyButtonClicked)
+            {
+                this._gameState.ChangeState();
+            }
         }
 
-        public void KeepCards()
+        public void EnemyMulligan()
         {
-            this._gameState.ChangeState();
+            List<Transform> temp = new List<Transform>();
+            foreach (Transform card in this._enemyHand)
+            {
+                temp.Add(card);
+            }
+
+            foreach (Transform card in temp)
+            {
+                this._enemyDeckController.ReplaceCard(card);
+            }
+
+            // Draw 7 cards
+            for (int i = 0; i < 7; i++)
+            {
+                this._enemyDeckController.DrawCard();
+            }
+
+            this._enemyMulliganButton.gameObject.SetActive(false);
+            this._enemyKeepCardsButton.gameObject.SetActive(false);
+
+            this._enemyButtonClicked = true;
+            if (this._playerButtonClicked)
+            {
+                this._gameState.ChangeState();
+            }
+        }
+
+        public void PlayerKeepCards()
+        {
+            this._playerMulliganButton.gameObject.SetActive(false);
+            this._playerKeepCardsButton.gameObject.SetActive(false);
+
+            this._playerButtonClicked = true;
+            if (this._enemyButtonClicked)
+            {
+                this._gameState.ChangeState();
+            }
+        }
+
+        public void EnemyKeepCards()
+        {
+            this._enemyMulliganButton.gameObject.SetActive(false);
+            this._enemyKeepCardsButton.gameObject.SetActive(false);
+
+            this._enemyButtonClicked = true;
+            if (this._playerButtonClicked)
+            {
+                this._gameState.ChangeState();
+            }
         }
 
         public override string Id()

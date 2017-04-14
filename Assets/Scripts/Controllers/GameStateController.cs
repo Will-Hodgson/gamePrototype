@@ -9,6 +9,13 @@ namespace Assets.Scripts
         private Battlefield _battlefield;
         private Transform _selectedCard;
         private Transform _selectedCardPanel;
+        private Text _playerManaText;
+        private Text _enemyManaText;
+
+        private int _playerMana = 0;
+        private int _playerManaMax = 0;
+        private int _enemyMana = 0;
+        private int _enemyManaMax = 0;
 
         public Transform selectedCard
         {
@@ -22,12 +29,38 @@ namespace Assets.Scripts
             private set { this._currentState = value; }
         }
 
+        public int playerMana
+        {
+            get { return this._playerMana; }
+            set { this.UpdatePlayerManaText(); this._playerMana = value; }
+        }
+
+        public int playerManaMax
+        {
+            get { return this._playerManaMax; }
+            set { this.UpdatePlayerManaText(); this._playerManaMax = value; }
+        }
+
+        public int enemyMana
+        {
+            get { return this._enemyMana; }
+            set { this.UpdateEnemyManaText(); this._enemyMana = value; }
+        }
+
+        public int enemyManaMax
+        {
+            get { return this._enemyManaMax; }
+            set { this.UpdateEnemyManaText(); this._enemyManaMax = value; }
+        }
+
         void Awake()
         {
             this._currentState = GameObject.Find("Camera").GetComponent<MulliganState>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._selectedCard = null;
             this._selectedCardPanel = GameObject.Find("SelectedCardPanel").transform;
+            this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
+            this._enemyManaText = GameObject.Find("EnemyMana").GetComponent<Text>();
         }
 
         void Start()
@@ -56,9 +89,14 @@ namespace Assets.Scripts
             this._currentState.Execute();
         }
 
-        public void UpdateText()
+        private void UpdatePlayerManaText()
         {
-            GameObject.Find("Button/Text").GetComponent<Text>().text = this._currentState.Id();
+            this._playerManaText.text = "Mana:" + this._playerMana.ToString() + "/" + this._playerManaMax.ToString();
+        }
+
+        private void UpdateEnemyManaText()
+        {
+            this._enemyManaText.text = "Mana:" + this._enemyMana.ToString() + "/" + this._enemyManaMax.ToString();
         }
     }
 }
