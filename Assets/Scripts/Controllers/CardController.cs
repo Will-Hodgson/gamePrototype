@@ -66,6 +66,13 @@ namespace Assets.Scripts
             this.boardLocation = Location.HAND;
         }
 
+		public void ReplaceCard() {
+			if (this.boardLocation != Location.HAND) {
+				Debug.LogWarning("Replacing a card that is not in your hand");
+			}
+			this.boardLocation = Location.DECK;
+		}
+
         public void DiscardCard()
         {
             if (this.boardLocation == Location.GRAVEYARD)
