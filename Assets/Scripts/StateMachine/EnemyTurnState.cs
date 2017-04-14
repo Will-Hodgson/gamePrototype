@@ -17,18 +17,7 @@ namespace Assets.Scripts
 
 		public override void Enter()
 		{
-			foreach (var card in this._battlefield.cards)
-			{
-				card.gameObject.AddComponent<EnemyTurnCardMouseController>();
-			}
-			for (int i = 0; i < this._playerHand.childCount; i++)
-			{
-				this._playerHand.GetChild(i).gameObject.AddComponent<EnemyTurnCardMouseController>();
-			}
-			for (int i = 0; i < this._playerDeck.childCount; i++)
-			{
-				this._playerDeck.GetChild(i).gameObject.AddComponent<EnemyTurnCardMouseController>();
-			}
+
 		}
 
 		public override void Execute()
@@ -37,17 +26,8 @@ namespace Assets.Scripts
 
 		public override void Exit()
 		{
-			foreach (var card in this._battlefield.cards)
-			{
-				Destroy(card.gameObject.GetComponent<EnemyTurnCardMouseController>());
-			}
-			for (int i = 0; i < this._playerHand.childCount; i++)
-			{
-				Destroy(this._playerHand.GetChild(i).gameObject.GetComponent<EnemyTurnCardMouseController>());
-			}
-			for (int i = 0; i < this._playerDeck.childCount; i++)
-			{
-				Destroy(this._playerDeck.GetChild(i).gameObject.GetComponent<EnemyTurnCardMouseController>());
+			foreach (Transform child in GameObject.Find("SelectedCardPanel").transform) {
+				Destroy(child.gameObject);
 			}
 		}
 

@@ -6,16 +6,23 @@ namespace Assets.Scripts
 	public class GameStateController : MonoBehaviour {
 		private State[] _states;
 		private State _currentState;
+		private Transform _selectedCard;
+
+		public Transform selectedCard {
+			get { return this._selectedCard; }
+			set { this._selectedCard = value; }
+		}
 
 		public void Start() 
 		{
 			var camera = GameObject.Find("Camera").transform;
 			this._states = new State[3];
-			this._states[0] = camera.GetComponent<MulliganState>();
-			this._states[1] = camera.GetComponent<PlayerTurnState>();
-			this._states[2] = camera.GetComponent<EnemyTurnState>();
+			this._states[0] = GameObject.Find("Camera").GetComponent<MulliganState>();
+			this._states[1] = GameObject.Find("Camera").GetComponent<PlayerTurnState>();
+			this._states[2] = GameObject.Find("Camera").GetComponent<EnemyTurnState>();
 
 			this._currentState = this._states[0];
+			this._selectedCard = null;
 		}
 
 		public void ChangeState() {

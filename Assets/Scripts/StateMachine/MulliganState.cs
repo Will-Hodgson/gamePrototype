@@ -13,6 +13,9 @@ namespace Assets.Scripts
 
 		public override void Exit()
 		{
+			foreach (Transform child in GameObject.Find("SelectedCardPanel").transform) {
+				Destroy(child.gameObject);
+			}
 		}
 
 		public override string Id()

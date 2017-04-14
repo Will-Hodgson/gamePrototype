@@ -16,25 +16,6 @@ namespace Assets.Scripts
 
 		public override void Enter()
 		{
-			foreach (var card in this._battlefield.cards)
-			{
-				if (card.GetComponent<CardController>().ownedBy == Owner.PLAYER)
-				{
-					card.gameObject.AddComponent<PlayerTurnCardMouseController>();
-				}
-				else 
-				{
-					card.gameObject.AddComponent<EnemyTurnCardMouseController>();
-				}
-			}
-			for (int i = 0; i < this._playerHand.childCount; i++)
-			{
-				this._playerHand.GetChild(i).gameObject.AddComponent<PlayerTurnCardMouseController>();
-			}
-			for (int i = 0; i < this._playerDeck.childCount; i++)
-			{
-				this._playerDeck.GetChild(i).gameObject.AddComponent<PlayerTurnCardMouseController>();
-			}
 		}
 
 		public override void Execute()
@@ -43,25 +24,10 @@ namespace Assets.Scripts
 
 		public override void Exit()
 		{
-			foreach (var card in this._battlefield.cards)
-			{
-				if (card.GetComponent<CardController>().ownedBy == Owner.PLAYER)
-				{
-					Destroy(card.gameObject.GetComponent<PlayerTurnCardMouseController>());
-				}
-				else 
-				{
-					Destroy(card.gameObject.GetComponent<EnemyTurnCardMouseController>());
-				}
+			foreach (Transform child in GameObject.Find("SelectedCardPanel").transform) {
+				Destroy(child.gameObject);
 			}
-			for (int i = 0; i < this._playerHand.childCount; i++)
-			{
-				Destroy(this._playerHand.GetChild(i).gameObject.GetComponent<PlayerTurnCardMouseController>());
-			}
-			for (int i = 0; i < this._playerDeck.childCount; i++)
-			{
-				Destroy(this._playerDeck.GetChild(i).gameObject.GetComponent<PlayerTurnCardMouseController>());
-			}
+			GameObject.Find("Camera").GetComponent<GameStateController>().selectedCard = null;
 		}
 
 		public override string Id()

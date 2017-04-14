@@ -1,0 +1,40 @@
+1 Temp/ 
+2 obj/ 
+3 
+ 
+4 Library/cache 
+5 Library/metadata 
+6 Library/previews 
+7 Library/ScriptAssemblies 
+8 
+ 
+9 Assembly-CSharp-Editor-firstpass-vs.csproj 
+10 Assembly-CSharp-Editor-firstpass.csproj 
+11 Assembly-CSharp-Editor-firstpass.pidb 
+12 Assembly-CSharp-Editor-vs.csproj 
+13 Assembly-CSharp-Editor.csproj 
+14 Assembly-CSharp-Editor.pidb 
+15 Assembly-CSharp-firstpass-vs.csproj 
+16 Assembly-CSharp-firstpass.csproj 
+17 Assembly-CSharp-firstpass.pidb 
+18 Assembly-CSharp-vs.csproj 
+19 Assembly-CSharp.csproj 
+20 Assembly-CSharp.pidb 
+21 Assembly-UnityScript-Editor-firstpass-vs.unityproj 
+22 Assembly-UnityScript-Editor-firstpass.pidb 
+23 Assembly-UnityScript-Editor-firstpass.unityproj 
+24 Assembly-UnityScript-Editor-vs.unityproj 
+25 Assembly-UnityScript-Editor.pidb 
+26 Assembly-UnityScript-Editor.unityproj 
+27 Assembly-UnityScript-firstpass-vs.unityproj 
+28 Assembly-UnityScript-firstpass.pidb 
+29 Assembly-UnityScript-firstpass.unityproj 
+30 Assembly-UnityScript-vs.unityproj 
+31 Assembly-UnityScript.pidb 
+32 Assembly-UnityScript.unityProj 
+33 
+ 
+34 *.svd 
+35 *.userprefs 
+36 *.suo 
+37 *.sln 
