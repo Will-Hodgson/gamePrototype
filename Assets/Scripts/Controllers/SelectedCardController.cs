@@ -36,14 +36,7 @@ namespace Assets.Scripts
         public void SetSelectedCardPanel(Transform card)
         {
             var duplicate = Instantiate(card.gameObject);
-            if (card.GetComponent<CardController>().ownedBy == Owner.PLAYER)
-            {
-                Destroy(duplicate.GetComponent<PlayerCardMouseController>());
-            }
-            else
-            {
-                Destroy(duplicate.GetComponent<EnemyCardMouseController>());
-            }
+            Destroy(duplicate.GetComponent<CardMouseController>());
             duplicate.transform.SetParent(this.transform);
             duplicate.gameObject.GetComponent<CardController>().transform.localScale = (new Vector3(2.5f, 2.5f, 2.5f));
         }

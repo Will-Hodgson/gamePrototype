@@ -20,8 +20,7 @@ namespace Assets.Scripts
 
         public void OnPointerDown(PointerEventData data)
         {
-            var currentState = this._gameState.currentState.Id();
-            if (this._selectedCardController.selectedCard != null && (currentState == "PlayerTurnState1" || currentState == "PlayerTurnState2" || currentState == "EnemyTurnState1" || currentState == "EnemyTurnState2"))
+            if (this._selectedCardController.selectedCard != null && this._gameState.phaseState.Id() != "AttackPhase")
             {
                 var cardController = this._selectedCardController.selectedCard.GetComponent<CardController>();
                 if (cardController.boardLocation == Location.HAND)

@@ -73,24 +73,6 @@ namespace Assets.Scripts
             this.ownedBy = owner;
         }
 
-        public void DrawCard()
-        {
-            if (this.boardLocation != Location.DECK)
-            {
-                Debug.LogWarning("Drew a card that is not in the deck!");
-            }
-            this.boardLocation = Location.HAND;
-        }
-
-        public void ReplaceCard()
-        {
-            if (this.boardLocation != Location.HAND)
-            {
-                Debug.LogWarning("Replacing a card that is not in your hand");
-            }
-            this.boardLocation = Location.DECK;
-        }
-
         public void DiscardCard()
         {
             if (this.boardLocation == Location.GRAVEYARD)
@@ -128,6 +110,14 @@ namespace Assets.Scripts
             this.square.gameObject.GetComponent<SquareController>().card = this; // new square
             if (this.boardLocation == Location.HAND)
             {
+                if (this.ownedBy == Owner.PLAYER)
+                {
+                    GameObject.Find("PlayerHand").GetComponent<HandController>().RemoveCard(this.transform);
+                }
+                else
+                {
+                    GameObject.Find("EnemyHand").GetComponent<HandController>().RemoveCard(this.transform);
+                }
                 this.boardLocation = Location.BATTLEFIELD;
                 this._battlefield.AddCard(this.transform);
             }

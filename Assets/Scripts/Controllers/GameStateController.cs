@@ -5,7 +5,8 @@ namespace Assets.Scripts
 {
     public class GameStateController : MonoBehaviour
     {
-        private State _currentState;
+        private State _turnState;
+        private State _phaseState;
         private Battlefield _battlefield;
         private SelectedCardController _selectedCardController;
         private Text _playerManaText;
@@ -16,10 +17,16 @@ namespace Assets.Scripts
         private int _enemyMana = 0;
         private int _enemyManaMax = 0;
 
-        public State currentState
+        public State turnState
         {
-            get { return this._currentState; }
-            private set { this._currentState = value; }
+            get { return this._turnState; }
+            private set { this._turnState = value; }
+        }
+
+        public State phaseState
+        {
+            get { return this._phaseState; }
+            private set { this._phaseState = value; }
         }
 
         public int playerMana
@@ -48,7 +55,8 @@ namespace Assets.Scripts
 
         void Awake()
         {
-            this._currentState = GameObject.Find("Camera").GetComponent<MulliganState>();
+            this._turnState = GameObject.Find("Camera").GetComponent<PlayerTurnState>();
+            this._phaseState = GameObject.Find("Camera").GetComponent<MulliganPhase>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._selectedCardController = GameObject.Find("SelectedCardPanel").GetComponent<SelectedCardController>();
             this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
@@ -57,18 +65,25 @@ namespace Assets.Scripts
 
         void Start()
         {
-            this._currentState.Enter();
-            this._currentState.Execute();
+            this._phaseState.Enter();
+            this._phaseState.Execute();
         }
 
         public void ChangeState()
         {
             this._selectedCardController.ResetSelectedCard();
             this._battlefield.ResetSquareBorders();
-            this._currentState.Exit();
-            this._currentState = this._currentState.NextState();
-            this._currentState.Enter();
-            this._currentState.Execute();
+            this._phaseState.Exit();
+            if (this._phaseState.Id() == "MainPhase2")
+            {
+                this._turnState.Exit();
+                this._turnState = this._turnState.NextState();
+                this._turnState.Enter();
+                this._turnState.Exit();
+            }
+            this._phaseState = this._phaseState.NextState();
+            this._phaseState.Enter();
+            this._phaseState.Execute();
         }
 
         private void UpdatePlayerManaText()

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts
 {
-    public class MulliganState : State
+    public class MulliganPhase : State
     {
         private State _nextState;
         private GameStateController _gameState;
-        private PlayerDeckController _playerDeckController;
-        private EnemyDeckController _enemyDeckController;
-        private Transform _playerHand;
-        private Transform _enemyHand;
+        private DeckController _playerDeckController;
+        private DeckController _enemyDeckController;
+        private HandController _playerHandController;
+        private HandController _enemyHandController;
         private Text _stateButtonText;
         private Transform _playerMulliganButton;
         private Transform _playerKeepCardsButton;
@@ -22,12 +22,12 @@ namespace Assets.Scripts
 
         void Awake()
         {
-            this._nextState = GameObject.Find("Camera").GetComponent<PlayerTurnState1>();
+            this._nextState = GameObject.Find("Camera").GetComponent<MainPhase1>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
-            this._playerDeckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<PlayerDeckController>();
-            this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<EnemyDeckController>();
-            this._playerHand = GameObject.Find("PlayerHand").transform;
-            this._enemyHand = GameObject.Find("EnemyHand").transform;
+            this._playerDeckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<DeckController>();
+            this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<DeckController>();
+            this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
+            this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
             this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
             this._playerMulliganButton = GameObject.Find("PlayerMulliganButton").transform;
             this._playerKeepCardsButton = GameObject.Find("PlayerKeepCardsButton").transform;
@@ -45,8 +45,8 @@ namespace Assets.Scripts
             // Draw 7 cards
             for (int i = 0; i < 7; i++)
             {
-                this._playerDeckController.DrawCard();
-                this._enemyDeckController.DrawCard();
+                this._playerHandController.AddCard(this._playerDeckController.DrawCard());
+                this._enemyHandController.AddCard(this._enemyDeckController.DrawCard());
             }
                 
         }
@@ -64,20 +64,21 @@ namespace Assets.Scripts
         public void PlayerMulligan()
         {
             List<Transform> temp = new List<Transform>();
-            foreach (Transform card in this._playerHand)
+            foreach (Transform card in this._playerHandController.cards)
             {
                 temp.Add(card);
             }
 
             foreach (Transform card in temp)
             {
+                this._playerHandController.RemoveCard(card);
                 this._playerDeckController.ReplaceCard(card);
             }
 
             // Draw 7 cards
             for (int i = 0; i < 7; i++)
             {
-                this._playerDeckController.DrawCard();
+                this._playerHandController.AddCard(this._playerDeckController.DrawCard());
             }
 
             this._playerMulliganButton.gameObject.SetActive(false);
@@ -93,20 +94,21 @@ namespace Assets.Scripts
         public void EnemyMulligan()
         {
             List<Transform> temp = new List<Transform>();
-            foreach (Transform card in this._enemyHand)
+            foreach (Transform card in this._enemyHandController.cards)
             {
                 temp.Add(card);
             }
 
             foreach (Transform card in temp)
             {
+                this._enemyHandController.RemoveCard(card);
                 this._enemyDeckController.ReplaceCard(card);
             }
 
             // Draw 7 cards
             for (int i = 0; i < 7; i++)
             {
-                this._enemyDeckController.DrawCard();
+                this._enemyHandController.AddCard(this._enemyDeckController.DrawCard());
             }
 
             this._enemyMulliganButton.gameObject.SetActive(false);
@@ -145,7 +147,7 @@ namespace Assets.Scripts
 
         public override string Id()
         {
-            return "MulliganState";
+            return "MulliganPhase";
         }
     }
 }

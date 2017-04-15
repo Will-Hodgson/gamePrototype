@@ -120,7 +120,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 85735066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15252848c6ce73a4cb0c66b679b1497c, type: 3}
+  m_Script: {fileID: 11500000, guid: e033c8398fec4cc41852cdd6826cd962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 22448404, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}
@@ -741,6 +741,7 @@ GameObject:
   - component: {fileID: 584113060}
   - component: {fileID: 584113059}
   - component: {fileID: 584113058}
+  - component: {fileID: 584113062}
   m_Layer: 5
   m_Name: EnemyHand
   m_TagString: Untagged
@@ -832,6 +833,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 584113056}
+--- !u!114 &584113062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 584113056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41002d0da9e7e5f49b6268a8b9406ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &627942517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,6 +1139,7 @@ GameObject:
   - component: {fileID: 722848648}
   - component: {fileID: 722848646}
   - component: {fileID: 722848645}
+  - component: {fileID: 722848647}
   m_Layer: 5
   m_Name: PlayerHand
   m_TagString: Untagged
@@ -1185,6 +1198,17 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &722848647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 722848643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41002d0da9e7e5f49b6268a8b9406ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &722848648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1626,7 +1650,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1534403272}
+      - m_Target: {fileID: 1534403268}
         m_MethodName: EnemyMulligan
         m_Mode: 1
         m_Arguments:
@@ -1866,7 +1890,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1534403272}
+      - m_Target: {fileID: 1534403268}
         m_MethodName: PlayerMulligan
         m_Mode: 1
         m_Arguments:
@@ -1988,7 +2012,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1534403266}
+      - m_Target: {fileID: 1534403271}
         m_MethodName: ChangeState
         m_Mode: 1
         m_Arguments:
@@ -2219,7 +2243,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1534403272}
+      - m_Target: {fileID: 1534403268}
         m_MethodName: EnemyKeepCards
         m_Mode: 1
         m_Arguments:
@@ -2277,13 +2301,12 @@ GameObject:
   - component: {fileID: 1534403262}
   - component: {fileID: 1534403261}
   - component: {fileID: 1534403260}
-  - component: {fileID: 1534403266}
-  - component: {fileID: 1534403272}
   - component: {fileID: 1534403271}
   - component: {fileID: 1534403270}
   - component: {fileID: 1534403269}
   - component: {fileID: 1534403268}
   - component: {fileID: 1534403267}
+  - component: {fileID: 1534403266}
   - component: {fileID: 1534403265}
   m_Layer: 0
   m_Name: Camera
@@ -2370,7 +2393,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8206638f55d64014c845ce93e0f51ff3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bac56d11011d0d4faf0b7cbcb2c2027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1534403266
@@ -2381,7 +2404,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d951fc44137d214d93187a772aade39, type: 3}
+  m_Script: {fileID: 11500000, guid: 62d432c627e519a4d860836ecc6aa99b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1534403267
@@ -2392,7 +2415,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 348be41beb0060f4da9cf8340145b45a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a58ad6a7c717f34c949ba5613a7b26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1534403268
@@ -2403,7 +2426,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72f31b59dcdfa3c44aa4911bb80c788b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ed689a95df775746b0e02c8fd634f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1534403269
@@ -2414,7 +2437,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bf74167bb077cb45a42042cbe71bdb7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3413e1c8ff1d2384d84b91c696d9dee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1534403270
@@ -2425,7 +2448,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 309e46d1d86e4264e9ef5e20ae284fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: d39931dbbaa40c3428bce5af5767848a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1534403271
@@ -2436,18 +2459,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534403259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c980fef980f2ff428030836e9b3b801, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1534403272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1534403259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ed689a95df775746b0e02c8fd634f8b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d951fc44137d214d93187a772aade39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1556200103 stripped
@@ -2467,7 +2479,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1556200103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c22261626bbfe7849ae8808a58bf2446, type: 3}
+  m_Script: {fileID: 11500000, guid: e033c8398fec4cc41852cdd6826cd962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _cardPrefab: {fileID: 22448404, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}
@@ -2930,7 +2942,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1534403272}
+      - m_Target: {fileID: 1534403268}
         m_MethodName: PlayerKeepCards
         m_Mode: 1
         m_Arguments:
