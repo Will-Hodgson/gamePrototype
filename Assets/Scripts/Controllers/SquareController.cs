@@ -26,5 +26,25 @@ namespace Assets.Scripts
             this.battlefieldLocation = location;
             this.card = null;
         }
+
+        public void ColorBoarderRed()
+        {
+            this.gameObject.GetComponent<Image>().color = UnityEngine.Color.red;
+        }
+
+        public void ColorBoarderGreen()
+        {
+            this.gameObject.GetComponent<Image>().color = UnityEngine.Color.green;
+        }
+
+        public void ColorBoarderGray()
+        {
+            this.gameObject.GetComponent<Image>().color = UnityEngine.Color.gray;
+        }
+
+        public void ColorBoarderClear()
+        {
+            this.gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
+        }
     }
 }

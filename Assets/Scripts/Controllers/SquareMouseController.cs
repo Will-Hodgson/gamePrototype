@@ -9,25 +9,24 @@ namespace Assets.Scripts
     {
         private Battlefield _battlefield;
         private GameStateController _gameState;
-        private Transform _selectedCardPanel;
+        private SelectedCardController _selectedCardController;
 
         void Awake()
         {
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
-            this._selectedCardPanel = GameObject.Find("SelectedCardPanel").transform;
+            this._selectedCardController = GameObject.Find("SelectedCardPanel").GetComponent<SelectedCardController>();
         }
 
         public void OnPointerDown(PointerEventData data)
         {
-            var selectedCard = this._gameState.selectedCard;
             var currentState = this._gameState.currentState.Id();
-            if (selectedCard != null && (currentState == "PlayerTurnState1" || currentState == "PlayerTurnState2" || currentState == "EnemyTurnState1" || currentState == "EnemyTurnState2"))
+            if (this._selectedCardController.selectedCard != null && (currentState == "PlayerTurnState1" || currentState == "PlayerTurnState2" || currentState == "EnemyTurnState1" || currentState == "EnemyTurnState2"))
             {
-                var cardController = selectedCard.GetComponent<CardController>();
+                var cardController = this._selectedCardController.selectedCard.GetComponent<CardController>();
                 if (cardController.boardLocation == Location.HAND)
                 {
-                    this._battlefield.AddCard(selectedCard);
+                    this._battlefield.AddCard(this._selectedCardController.selectedCard);
                 }
                 var moveSquares = cardController.SquaresInMoveDistance();
 
@@ -43,15 +42,8 @@ namespace Assets.Scripts
                 }
 
                 // reset all the squares to clear
-                foreach (Transform square in this._battlefield.GetSquares())
-                {
-                    square.gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
-                }
-                foreach (Transform child in this._selectedCardPanel)
-                {
-                    Destroy(child.gameObject);
-                }
-                this._gameState.selectedCard = null;
+                this._battlefield.ResetSquareBorders();
+                this._selectedCardController.ResetSelectedCard();
             }
         }
     }

@@ -77,5 +77,13 @@ namespace Assets.Scripts
             }
             return squares;
         }
+
+        public void ResetSquareBorders()
+        {
+            foreach (Transform square in this.GetSquares())
+            {
+                square.GetComponent<SquareController>().ColorBoarderClear();
+            }
+        }
     }
 }

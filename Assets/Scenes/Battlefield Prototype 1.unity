@@ -2488,6 +2488,7 @@ GameObject:
   - component: {fileID: 1670903632}
   - component: {fileID: 1670903631}
   - component: {fileID: 1670903630}
+  - component: {fileID: 1670903634}
   m_Layer: 5
   m_Name: SelectedCardPanel
   m_TagString: Untagged
@@ -2579,6 +2580,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1670903628}
+--- !u!114 &1670903634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1670903628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0daf18a6dc27b1743b7b0b149a98b702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1677520498 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22448404, guid: fcc06f6d204df9146b6260f13bc7944c,

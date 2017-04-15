@@ -7,8 +7,7 @@ namespace Assets.Scripts
     {
         private State _currentState;
         private Battlefield _battlefield;
-        private Transform _selectedCard;
-        private Transform _selectedCardPanel;
+        private SelectedCardController _selectedCardController;
         private Text _playerManaText;
         private Text _enemyManaText;
 
@@ -16,12 +15,6 @@ namespace Assets.Scripts
         private int _playerManaMax = 0;
         private int _enemyMana = 0;
         private int _enemyManaMax = 0;
-
-        public Transform selectedCard
-        {
-            get { return this._selectedCard; }
-            set { this._selectedCard = value; }
-        }
 
         public State currentState
         {
@@ -57,8 +50,7 @@ namespace Assets.Scripts
         {
             this._currentState = GameObject.Find("Camera").GetComponent<MulliganState>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
-            this._selectedCard = null;
-            this._selectedCardPanel = GameObject.Find("SelectedCardPanel").transform;
+            this._selectedCardController = GameObject.Find("SelectedCardPanel").GetComponent<SelectedCardController>();
             this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
             this._enemyManaText = GameObject.Find("EnemyMana").GetComponent<Text>();
         }
@@ -71,18 +63,8 @@ namespace Assets.Scripts
 
         public void ChangeState()
         {
-            foreach (Transform child in this._selectedCardPanel)
-            {
-                Destroy(child.gameObject);
-            }
-            this._selectedCard = null;
-
-            // reset all the squares to clear
-            foreach (Transform square in this._battlefield.GetSquares())
-            {
-                square.gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
-            }
-
+            this._selectedCardController.ResetSelectedCard();
+            this._battlefield.ResetSquareBorders();
             this._currentState.Exit();
             this._currentState = this._currentState.NextState();
             this._currentState.Enter();
