@@ -56,8 +56,8 @@ namespace Assets.Scripts
 
         public bool canAttack
         {
-            get { return this._canMove; }
-            set { this._canMove = value; }
+            get { return this._canAttack; }
+            set { this._canAttack = value; }
         }
 
         void Awake()
@@ -66,8 +66,6 @@ namespace Assets.Scripts
             this._cardData = this.GetComponent<CardData>();
             this.boardLocation = Location.DECK;
             this.square = null;
-            this.canMove = false;
-            this.canAttack = false;
         }
 
         public void Init(Owner owner)
@@ -140,15 +138,30 @@ namespace Assets.Scripts
             var squares = new List<Transform>();
             if (this.boardLocation == Location.HAND)
             {
-                // return all the not filled squares in the first row
-                for (var i = 0; i < _battlefield.width; i++)
-                {
-                    if (this._battlefield.GetSquareAt(i, this._battlefield.height - 1).GetComponent<SquareController>().card == null)
+                if (this.ownedBy == Owner.PLAYER)
+                {                 
+                    // return all the not filled squares in the row closest to the player
+                    for (var i = 0; i < _battlefield.width; i++)
                     {
-                        squares.Add(this._battlefield.GetSquareAt(i, this._battlefield.height - 1));
+                        if (this._battlefield.GetSquareAt(i, this._battlefield.height - 1).GetComponent<SquareController>().card == null)
+                        {
+                            squares.Add(this._battlefield.GetSquareAt(i, this._battlefield.height - 1));
+                        }
                     }
+                    return squares;
                 }
-                return squares;
+                else
+                {
+                    // return all the not filled squares in the row closest to the enemy
+                    for (var i = 0; i < _battlefield.width; i++)
+                    {
+                        if (this._battlefield.GetSquareAt(i, 0).GetComponent<SquareController>().card == null)
+                        {
+                            squares.Add(this._battlefield.GetSquareAt(i, 0));
+                        }
+                    }
+                    return squares;
+                }                    
             }
             if (this.boardLocation != Location.BATTLEFIELD)
             {
@@ -251,7 +264,7 @@ namespace Assets.Scripts
                 if (currentLocation[0] - i >= 0)
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1]).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1]));
                     }
@@ -260,7 +273,7 @@ namespace Assets.Scripts
                 if (currentLocation[0] + i < this._battlefield.width)
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1]).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1]));
                     }
@@ -269,7 +282,7 @@ namespace Assets.Scripts
                 if (currentLocation[1] - i >= 0)
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] - i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(_battlefield.GetSquareAt(currentLocation[0], currentLocation[1] - i));
                     }
@@ -278,7 +291,7 @@ namespace Assets.Scripts
                 if (currentLocation[1] + i < this._battlefield.height)
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] + i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] + i));
                     }
@@ -291,7 +304,7 @@ namespace Assets.Scripts
                 if ((currentLocation[0] - i >= 0) && (currentLocation[1] - i >= 0))
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] - i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] - i));
                     }
@@ -300,7 +313,7 @@ namespace Assets.Scripts
                 if ((currentLocation[0] + i < this._battlefield.width) && (currentLocation[1] - i >= 0))
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] - i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] - i));
                     }
@@ -309,7 +322,7 @@ namespace Assets.Scripts
                 if ((currentLocation[0] - i >= 0) && (currentLocation[1] + i < this._battlefield.height))
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] + i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] + i));
                     }
@@ -318,7 +331,7 @@ namespace Assets.Scripts
                 if ((currentLocation[0] + i < this._battlefield.width) && (currentLocation[1] + i < this._battlefield.height))
                 {
                     var card = this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] + i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy == Owner.ENEMY)
+                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
                     {
                         transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] + i));
                     }

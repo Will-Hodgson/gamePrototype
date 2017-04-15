@@ -21,7 +21,8 @@ namespace Assets.Scripts
         public void OnPointerDown(PointerEventData data)
         {
             var selectedCard = this._gameState.selectedCard;
-            if (selectedCard != null)
+            var currentState = this._gameState.currentState.Id();
+            if (selectedCard != null && (currentState == "PlayerTurnState1" || currentState == "PlayerTurnState2" || currentState == "EnemyTurnState1" || currentState == "EnemyTurnState2"))
             {
                 var cardController = selectedCard.GetComponent<CardController>();
                 if (cardController.boardLocation == Location.HAND)
@@ -37,6 +38,7 @@ namespace Assets.Scripts
                     {
                         cardController.MoveCard(this.transform);
                         cardController.transform.SetParent(this.transform);
+                        cardController.canMove = false;
                     }
                 }
 
@@ -50,7 +52,6 @@ namespace Assets.Scripts
                     Destroy(child.gameObject);
                 }
                 this._gameState.selectedCard = null;
-                cardController.canMove = false;
             }
         }
     }

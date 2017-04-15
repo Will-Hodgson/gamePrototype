@@ -36,6 +36,7 @@ namespace Assets.Scripts
             cardController.gameObject.transform.SetParent(GameObject.Find("EnemyHand").transform);
             cardController.transform.localScale = (new Vector3(1, 1, 1));
             cardController.gameObject.GetComponent<CanvasGroup>().alpha = 1f;
+            cardController.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
             if (this._cards.Count == 0)
             {
                 this.gameObject.GetComponentInChildren<Text>().text = "EMPTY";

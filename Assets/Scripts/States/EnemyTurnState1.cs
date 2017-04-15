@@ -9,6 +9,7 @@ namespace Assets.Scripts
         private GameStateController _gameState;
         private Battlefield _battlefield;
         private EnemyDeckController _deckController;
+        private Transform _enemyHand;
         private Text _stateButtonText;
 
         void Awake()
@@ -17,6 +18,7 @@ namespace Assets.Scripts
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._deckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<EnemyDeckController>();
+            this._enemyHand = GameObject.Find("EnemyHand").transform;
             this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
         }
 
@@ -37,18 +39,16 @@ namespace Assets.Scripts
                     cardController.canMove = true;
                 }
             }
+            foreach (Transform card in this._enemyHand)
+            {
+                CardController cardController = card.gameObject.GetComponent<CardController>();
+                cardController.canMove = true;
+            }
         }
 
         public override void Exit()
         {
-            foreach (Transform card in this._battlefield.cards)
-            {
-                CardController cardController = card.gameObject.GetComponent<CardController>();
-                if (cardController.ownedBy == Owner.ENEMY)
-                {
-                    cardController.canMove = false;
-                }
-            }
+
         }
 
         public override State NextState()
