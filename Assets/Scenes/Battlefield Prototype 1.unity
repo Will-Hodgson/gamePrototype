@@ -403,6 +403,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 169831897}
+--- !u!1 &182155683 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 124444, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}
+  m_PrefabInternal: {fileID: 864627788}
+--- !u!114 &182155688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 182155683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401f93ac2cdad1b42b6b878ac6f30ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &211874509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1801,7 +1816,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 124444, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}
       propertyPath: m_Name
-      value: PlayerGraveyard
+      value: EnemyGraveyard
       objectReference: {fileID: 0}
     - target: {fileID: 195544, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}
       propertyPath: m_IsActive
@@ -2866,6 +2881,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1829374290}
+--- !u!1 &1986659155 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 124444, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}
+  m_PrefabInternal: {fileID: 905962125}
+--- !u!114 &1986659160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1986659155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401f93ac2cdad1b42b6b878ac6f30ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2037706636
 GameObject:
   m_ObjectHideFlags: 0

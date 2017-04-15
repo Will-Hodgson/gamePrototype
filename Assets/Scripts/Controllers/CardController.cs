@@ -23,6 +23,8 @@ namespace Assets.Scripts
     public class CardController : MonoBehaviour
     {
         private Battlefield _battlefield;
+        private HandController _handController;
+        private GraveyardController _graveyardController;
         private CardData _cardData;
         private Owner _ownedBy;
         private Location _boardLocation;
@@ -63,6 +65,8 @@ namespace Assets.Scripts
         void Awake()
         {
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
+            this._handController = null;
+            this._graveyardController = null;
             this._cardData = this.GetComponent<CardData>();
             this.boardLocation = Location.DECK;
             this.square = null;
@@ -71,6 +75,16 @@ namespace Assets.Scripts
         public void Init(Owner owner)
         {
             this.ownedBy = owner;
+            if (this._ownedBy == Owner.PLAYER)
+            {
+                this._handController = GameObject.Find("PlayerHand").GetComponent<HandController>();
+                this._graveyardController = GameObject.Find("PlayerGraveyardPanel/PlayerGraveyard").GetComponent<GraveyardController>();
+            }
+            else
+            {
+                this._handController = GameObject.Find("EnemyHand").GetComponent<HandController>();
+                this._graveyardController = GameObject.Find("EnemyGraveyardPanel/EnemyGraveyard").GetComponent<GraveyardController>();
+            }
         }
 
         public void DiscardCard()
@@ -79,9 +93,17 @@ namespace Assets.Scripts
             {
                 Debug.LogWarning("Discarded a card that is already in the graveyard");
             }
-            this.boardLocation = Location.GRAVEYARD;
-            this.square = null;
-            this._battlefield.DeleteCard(this.transform);
+            if (this.boardLocation == Location.BATTLEFIELD)
+            {
+                this._battlefield.DeleteCard(this.transform);
+            }
+            else if (this.boardLocation == Location.HAND)
+            {
+                this._handController.RemoveCard(this.transform);
+            }
+            this._square.GetComponent<SquareController>().card = null;
+            this._square = null;
+            this._graveyardController.AddCard(this.transform);
         }
 
         public void MoveCard(Transform square)
@@ -123,6 +145,15 @@ namespace Assets.Scripts
             }
         }
 
+        public void TakeDamage(int damage)
+        {
+            this._cardData.health -= damage;
+            if (this._cardData.health <= 0)
+            {
+                // Card has been killed
+                this.DiscardCard();
+            }
+        }
         public List<Transform> SquaresInMoveDistance()
         {
             var squares = new List<Transform>();

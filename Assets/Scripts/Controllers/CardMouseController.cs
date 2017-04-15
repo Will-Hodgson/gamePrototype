@@ -100,7 +100,7 @@ namespace Assets.Scripts
                             // This card is being attacked
                             if (this._selectedCardController.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                             {
-                                Debug.Log("ATTACK!!!!!");
+                                this._cardController.TakeDamage(this._selectedCardController.selectedCard.GetComponent<CardData>().attack);
                                 this._selectedCardController.selectedCard.GetComponent<CardController>().canAttack = false;
                                 this._selectedCardController.ResetSelectedCard();
                                 this._selectedCardController.SetSelectedCardPanel(this.transform);
@@ -187,7 +187,7 @@ namespace Assets.Scripts
                             // This card is being attacked
                             if (this._selectedCardController.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                             {
-                                Debug.Log("ATTACK!!!!!");
+                                this._cardController.TakeDamage(this._selectedCardController.selectedCard.GetComponent<CardData>().attack);
                                 this._selectedCardController.selectedCard.GetComponent<CardController>().canAttack = false;
                                 this._selectedCardController.ResetSelectedCard();
                                 this._selectedCardController.SetSelectedCardPanel(this.transform);
