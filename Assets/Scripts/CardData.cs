@@ -99,7 +99,7 @@ namespace Assets.Scripts
 
         void Awake()
         {
-            this._manaCost = 1;
+            this._manaCost = 2;
             this._health = this._maxHealth = 1;
             this._attack = this._maxAttack = 1;
             this._attackDistance = this._maxAttackDistance = 1;

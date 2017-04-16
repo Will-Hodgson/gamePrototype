@@ -12,7 +12,7 @@ namespace Assets.Scripts
         private DeckController _enemyDeckController;
         private HandController _playerHandController;
         private HandController _enemyHandController;
-        private Text _stateButtonText;
+        private Text _phasePanelText;
         private Transform _playerMulliganButton;
         private Transform _playerKeepCardsButton;
         private Transform _enemyMulliganButton;
@@ -28,7 +28,7 @@ namespace Assets.Scripts
             this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<DeckController>();
             this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
             this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
-            this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
+            this._phasePanelText = GameObject.Find("PhasePanel/Text").GetComponent<Text>();
             this._playerMulliganButton = GameObject.Find("PlayerMulliganButton").transform;
             this._playerKeepCardsButton = GameObject.Find("PlayerKeepCardsButton").transform;
             this._enemyMulliganButton = GameObject.Find("EnemyMulliganButton").transform;
@@ -37,7 +37,7 @@ namespace Assets.Scripts
 
         public override void Enter()
         {
-            this._stateButtonText.text = this.Id();
+            this._phasePanelText.text = "MulliganPhase";
         }
 
         public override void Execute()

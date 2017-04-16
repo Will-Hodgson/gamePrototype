@@ -32,25 +32,25 @@ namespace Assets.Scripts
         public int playerMana
         {
             get { return this._playerMana; }
-            set { this.UpdatePlayerManaText(); this._playerMana = value; }
+            set { this._playerMana = value; this.UpdatePlayerManaText(); }
         }
 
         public int playerManaMax
         {
             get { return this._playerManaMax; }
-            set { this.UpdatePlayerManaText(); this._playerManaMax = value; }
+            set {  this._playerManaMax = value; this.UpdatePlayerManaText(); }
         }
 
         public int enemyMana
         {
             get { return this._enemyMana; }
-            set { this.UpdateEnemyManaText(); this._enemyMana = value; }
+            set {  this._enemyMana = value; this.UpdateEnemyManaText(); }
         }
 
         public int enemyManaMax
         {
             get { return this._enemyManaMax; }
-            set { this.UpdateEnemyManaText(); this._enemyManaMax = value; }
+            set {  this._enemyManaMax = value; this.UpdateEnemyManaText(); }
         }
 
         void Awake()
@@ -74,7 +74,12 @@ namespace Assets.Scripts
             this._selectedCardController.ResetSelectedCard();
             this._battlefield.ResetSquareBorders();
             this._phaseState.Exit();
-            if (this._phaseState.Id() == "MainPhase2")
+            if (this._phaseState.Id() == "MulliganPhase")
+            {
+                this._turnState.Enter();
+                this._turnState.Execute();
+            }
+            else if (this._phaseState.Id() == "MainPhase2")
             {
                 this._turnState.Exit();
                 this._turnState = this._turnState.NextState();

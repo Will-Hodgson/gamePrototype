@@ -8,23 +8,19 @@ namespace Assets.Scripts
         private State _nextState;
         private GameStateController _gameState;
         private Battlefield _battlefield;
-        private DeckController _playerDeckController;
-        private DeckController _enemyDeckController;
-        private Text _stateButtonText;
+        private Text _phasePanelText;
 
         void Awake()
         {
             this._nextState = GameObject.Find("Camera").GetComponent<MainPhase2>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
-            this._playerDeckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<DeckController>();
-            this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<DeckController>();
-            this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
+            this._phasePanelText = GameObject.Find("PhasePanel/Text").GetComponent<Text>();
         }
 
         public override void Enter()
         {
-            this._stateButtonText.text = this.Id();
+            this._phasePanelText.text = "AttackPhase";
         }
 
         public override void Execute()

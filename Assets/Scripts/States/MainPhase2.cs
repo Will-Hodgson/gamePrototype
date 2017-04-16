@@ -10,7 +10,7 @@ namespace Assets.Scripts
         private Battlefield _battlefield;
         private HandController _playerHandController;
         private HandController _enemyHandController;
-        private Text _stateButtonText;
+        private Text _phasePanelText;
 
         void Awake()
         {
@@ -19,12 +19,12 @@ namespace Assets.Scripts
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
             this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
-            this._stateButtonText = GameObject.Find("StateButton/Text").GetComponent<Text>();
+            this._phasePanelText = GameObject.Find("PhasePanel/Text").GetComponent<Text>();
         }
 
         public override void Enter()
         {
-            this._stateButtonText.text = this.Id();
+            this._phasePanelText.text = "MainPhase2";
         }
 
         public override void Execute()

@@ -154,6 +154,12 @@ namespace Assets.Scripts
                 this.DiscardCard();
             }
         }
+
+        public void ResetStats()
+        {
+            this._cardData.Reset();
+        }
+
         public List<Transform> SquaresInMoveDistance()
         {
             var squares = new List<Transform>();
