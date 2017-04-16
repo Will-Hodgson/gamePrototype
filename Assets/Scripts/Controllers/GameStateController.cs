@@ -8,7 +8,7 @@ namespace Assets.Scripts
         private State _turnState;
         private State _phaseState;
         private Battlefield _battlefield;
-        private SelectedCardController _selectedCardController;
+        private Transform _selectedCard;
         private Text _playerManaText;
         private Text _enemyManaText;
 
@@ -27,6 +27,12 @@ namespace Assets.Scripts
         {
             get { return this._phaseState; }
             private set { this._phaseState = value; }
+        }
+
+        public Transform selectedCard
+        {
+            get { return this._selectedCard; }
+            set { this._selectedCard = value; }
         }
 
         public int playerMana
@@ -58,7 +64,7 @@ namespace Assets.Scripts
             this._turnState = GameObject.Find("Camera").GetComponent<PlayerTurnState>();
             this._phaseState = GameObject.Find("Camera").GetComponent<MulliganPhase>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
-            this._selectedCardController = GameObject.Find("SelectedCardPanel").GetComponent<SelectedCardController>();
+            this._selectedCard = null;
             this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
             this._enemyManaText = GameObject.Find("EnemyMana").GetComponent<Text>();
         }
@@ -71,7 +77,7 @@ namespace Assets.Scripts
 
         public void ChangeState()
         {
-            this._selectedCardController.ResetSelectedCard();
+            this._selectedCard = null;
             this._battlefield.ResetSquareBorders();
             this._phaseState.Exit();
             if (this._phaseState.Id() == "MulliganPhase")

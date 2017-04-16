@@ -5,21 +5,36 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
-    public class CardMouseController : MonoBehaviour, IPointerDownHandler
+    public class CardMouseController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
         private CardController _cardController;
-        private SelectedCardController _selectedCardController;
         private Battlefield _battlefield;
         private GameStateController _gameState;
+        private Transform _cardPreviewPanel;
 
         void Awake()
         {
             this._cardController = this.GetComponent<CardController>();
-            this._selectedCardController = GameObject.Find("SelectedCardPanel").GetComponent<SelectedCardController>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
+            this._cardPreviewPanel = GameObject.Find("CardPreviewPanel").transform;
         }
 
+        public void OnPointerEnter(PointerEventData data)
+        {
+            var duplicate = Instantiate(this.gameObject);
+            Destroy(duplicate.GetComponent<CardMouseController>());
+            duplicate.transform.SetParent(this._cardPreviewPanel);
+            duplicate.gameObject.GetComponent<CardController>().transform.localScale = (new Vector3(2.5f, 2.5f, 2.5f));
+        }
+
+        public void OnPointerExit(PointerEventData data)
+        {
+            foreach (Transform card in this._cardPreviewPanel)
+            {
+                Destroy(card.gameObject);
+            }
+        }
         public void OnPointerDown(PointerEventData data)
         {
             if (this._gameState.turnState.Id() == "PlayerTurnState")
@@ -32,14 +47,10 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // reset the selected card display
-                        this._selectedCardController.ResetSelectedCard();
-                        this._selectedCardController.SetSelectedCardPanel(this.transform);
-
                         // Check if the card has already been moved
                         if (this._cardController.canMove)
                         {
-                            this._selectedCardController.selectedCard = this.transform;
+                            this._gameState.selectedCard = this.transform;
                             // Card selected - show available moves
                             if (this._cardController.boardLocation == Location.BATTLEFIELD)
                             {
@@ -52,16 +63,6 @@ namespace Assets.Scripts
                             }
                         }
                     }
-                    else
-                    {
-                        // Clicked on enemy's card during player's main phase
-                        // reset all the squares to clear
-                        this._battlefield.ResetSquareBorders();
-
-                        // reset the selected card display
-                        this._selectedCardController.ResetSelectedCard();
-                        this._selectedCardController.SetSelectedCardPanel(this.transform);
-                    }
                 }
                 else
                 {
@@ -71,14 +72,10 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // reset the selected card display to have this card
-                        this._selectedCardController.ResetSelectedCard();
-                        this._selectedCardController.SetSelectedCardPanel(this.transform);
-
                         // Check if the card has already attacked
                         if (this._cardController.canAttack)
                         {
-                            this._selectedCardController.selectedCard = this.transform;
+                            this._gameState.selectedCard = this.transform;
                             // Card selected - show available attacks
                             if (this._cardController.boardLocation == Location.BATTLEFIELD)
                             {
@@ -95,15 +92,14 @@ namespace Assets.Scripts
                     else
                     {
                         // Clicked on enemy's card during player's attack phase
-                        if (this._selectedCardController.selectedCard != null)
+                        if (this._gameState.selectedCard != null)
                         {
                             // This card is being attacked
-                            if (this._selectedCardController.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
+                            if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                             {
-                                this._cardController.TakeDamage(this._selectedCardController.selectedCard.GetComponent<CardData>().attack);
-                                this._selectedCardController.selectedCard.GetComponent<CardController>().canAttack = false;
-                                this._selectedCardController.ResetSelectedCard();
-                                this._selectedCardController.SetSelectedCardPanel(this.transform);
+                                this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
+                                this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
+                                this._gameState.selectedCard = null;
                             }
                         }
                     }
@@ -119,14 +115,10 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // reset the selected card display to have this card
-                        this._selectedCardController.ResetSelectedCard();
-                        this._selectedCardController.SetSelectedCardPanel(this.transform);
-
                         // Check if the card has already been moved
                         if (this._cardController.canMove)
                         {
-                            this._selectedCardController.selectedCard = this.transform;
+                            this._gameState.selectedCard = this.transform;
                             // Card selected - show available moves
                             if (this._cardController.boardLocation == Location.BATTLEFIELD)
                             {
@@ -139,16 +131,6 @@ namespace Assets.Scripts
                             }
                         }
                     }
-                    else
-                    {
-                        // Clicked on player's card during enemy's main phase
-                        // reset all the squares to clear
-                        this._battlefield.ResetSquareBorders();
-
-                        // reset the selected card display
-                        this._selectedCardController.ResetSelectedCard();
-                        this._selectedCardController.SetSelectedCardPanel(this.transform);
-                    }
                 }
                 else
                 {
@@ -158,14 +140,10 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // reset the selected card display to have this card
-                        this._selectedCardController.ResetSelectedCard();
-                        this._selectedCardController.SetSelectedCardPanel(this.transform);
-
                         // Check if the card has already attacked
                         if (this._cardController.canAttack)
                         {
-                            this._selectedCardController.selectedCard = this.transform;
+                            this._gameState.selectedCard = this.transform;
                             // Card selected - show available attacks
                             if (this._cardController.boardLocation == Location.BATTLEFIELD)
                             {
@@ -182,15 +160,14 @@ namespace Assets.Scripts
                     else
                     {
                         // Clicked on player's card during enemy's attack phase
-                        if (this._selectedCardController.selectedCard != null)
+                        if (this._gameState.selectedCard != null)
                         {
                             // This card is being attacked
-                            if (this._selectedCardController.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
+                            if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                             {
-                                this._cardController.TakeDamage(this._selectedCardController.selectedCard.GetComponent<CardData>().attack);
-                                this._selectedCardController.selectedCard.GetComponent<CardController>().canAttack = false;
-                                this._selectedCardController.ResetSelectedCard();
-                                this._selectedCardController.SetSelectedCardPanel(this.transform);
+                                this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
+                                this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
+                                this._gameState.selectedCard = null;
                             }
                         }
                     }

@@ -9,23 +9,21 @@ namespace Assets.Scripts
     {
         private Battlefield _battlefield;
         private GameStateController _gameState;
-        private SelectedCardController _selectedCardController;
 
         void Awake()
         {
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
-            this._selectedCardController = GameObject.Find("SelectedCardPanel").GetComponent<SelectedCardController>();
         }
 
         public void OnPointerDown(PointerEventData data)
         {
-            if (this._selectedCardController.selectedCard != null && this._gameState.phaseState.Id() != "AttackPhase")
+            if (this._gameState.selectedCard != null && this._gameState.phaseState.Id() != "AttackPhase")
             {
-                var cardController = this._selectedCardController.selectedCard.GetComponent<CardController>();
+                var cardController = this._gameState.selectedCard.GetComponent<CardController>();
                 if (cardController.boardLocation == Location.HAND)
                 {
-                    this._battlefield.AddCard(this._selectedCardController.selectedCard);
+                    this._battlefield.AddCard(this._gameState.selectedCard);
                 }
                 var moveSquares = cardController.SquaresInMoveDistance();
 
@@ -42,9 +40,8 @@ namespace Assets.Scripts
 
                 // reset all the squares to clear
                 this._battlefield.ResetSquareBorders();
-                this._selectedCardController.ResetSelectedCard();
+                this._gameState.selectedCard = null;
             }
         }
     }
 }
-
