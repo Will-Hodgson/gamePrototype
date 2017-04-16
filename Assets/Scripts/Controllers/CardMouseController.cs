@@ -35,6 +35,7 @@ namespace Assets.Scripts
                 Destroy(card.gameObject);
             }
         }
+
         public void OnPointerDown(PointerEventData data)
         {
             if (this._gameState.turnState.Id() == "PlayerTurnState")
@@ -47,8 +48,12 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // Check if the card has already been moved
-                        if (this._cardController.canMove)
+                        // Check if this card has already been selected, if so deselect it
+                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+                        {
+                            this._gameState.selectedCard = null;
+                        }
+                        else if (this._cardController.canMove)
                         {
                             this._gameState.selectedCard = this.transform;
                             // Card selected - show available moves
@@ -72,8 +77,12 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // Check if the card has already attacked
-                        if (this._cardController.canAttack)
+                        // Check if this card has already been selected, if so deselect it
+                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+                        {
+                            this._gameState.selectedCard = null;
+                        }
+                        else if (this._cardController.canAttack)
                         {
                             this._gameState.selectedCard = this.transform;
                             // Card selected - show available attacks
@@ -115,8 +124,12 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // Check if the card has already been moved
-                        if (this._cardController.canMove)
+                        // Check if this card has already been selected, if so deselect it
+                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+                        {
+                            this._gameState.selectedCard = null;
+                        }
+                        else if (this._cardController.canMove)
                         {
                             this._gameState.selectedCard = this.transform;
                             // Card selected - show available moves
@@ -140,8 +153,12 @@ namespace Assets.Scripts
                         // reset all the squares to clear
                         this._battlefield.ResetSquareBorders();
 
-                        // Check if the card has already attacked
-                        if (this._cardController.canAttack)
+                        // Check if this card has already been selected, if so deselect it
+                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+                        {
+                            this._gameState.selectedCard = null;
+                        }
+                        else if (this._cardController.canAttack)
                         {
                             this._gameState.selectedCard = this.transform;
                             // Card selected - show available attacks
