@@ -162,110 +162,66 @@ namespace Assets.Scripts
 
         public List<Transform> SquaresInMoveDistance()
         {
-            var squares = new List<Transform>();
+            List<Transform> squares = new List<Transform>();
+            List<Transform> possibleSquaresInMoveDistance = new List<Transform>();
+            List<List<int>> coordinates = new List<List<int>>();
+
             if (this.boardLocation == Location.HAND)
             {
+                // Card is in your hand
+                int y_coor = 0;
                 if (this.ownedBy == Owner.PLAYER)
-                {                 
-                    // return all the not filled squares in the row closest to the player
-                    for (var i = 0; i < _battlefield.width; i++)
-                    {
-                        if (this._battlefield.GetSquareAt(i, this._battlefield.height - 1).GetComponent<SquareController>().card == null)
-                        {
-                            squares.Add(this._battlefield.GetSquareAt(i, this._battlefield.height - 1));
-                        }
-                    }
-                    return squares;
-                }
-                else
                 {
-                    // return all the not filled squares in the row closest to the enemy
-                    for (var i = 0; i < _battlefield.width; i++)
+                    y_coor = this._battlefield.height - 1;
+                }
+                // return all the not filled squares in the row closest to the player/enemy
+                for (var i = 0; i < this._battlefield.width; i++)
+                {
+                    if (this._battlefield.GetSquareAt(i, y_coor).GetComponent<SquareController>().card == null)
                     {
-                        if (this._battlefield.GetSquareAt(i, 0).GetComponent<SquareController>().card == null)
-                        {
-                            squares.Add(this._battlefield.GetSquareAt(i, 0));
-                        }
+                        squares.Add(this._battlefield.GetSquareAt(i, y_coor));
                     }
-                    return squares;
-                }                    
+                }
+                return squares;
             }
+
             if (this.boardLocation != Location.BATTLEFIELD)
             {
                 Debug.LogWarning("Card is not on the battlefield or in players hand");
                 return null;
             }
-            var currentLocation = this.square.GetComponent<SquareController>().battlefieldLocation;           
-            
-            for (var i = 1; i <= this._cardData.moveDistance; i++)
+
+            // Card is on the battlefield
+            var currentLocation = this.square.GetComponent<SquareController>().battlefieldLocation;
+            // Add the coordinates of squares in the move distance
+            for (int i = 1; i <= this._cardData.moveDistance; i++)
             {
-                // left movement
-                if (currentLocation[0] - i >= 0)
+                coordinates.Add(new List<int> { currentLocation[0] - i, currentLocation[1] });
+                coordinates.Add(new List<int> { currentLocation[0] + i, currentLocation[1] });
+                coordinates.Add(new List<int> { currentLocation[0], currentLocation[1] - i });
+                coordinates.Add(new List<int> { currentLocation[0], currentLocation[1] + i });
+            }
+            for (int i = 1; i <= this._cardData.diagonalMoveDistance; i++)
+            {
+                coordinates.Add(new List<int> { currentLocation[0] - i, currentLocation[1] - i});
+                coordinates.Add(new List<int> { currentLocation[0] - i, currentLocation[1] + i});
+                coordinates.Add(new List<int> { currentLocation[0] + i, currentLocation[1] - i });
+                coordinates.Add(new List<int> { currentLocation[0] + i, currentLocation[1] + i });
+            }
+            // Get rid of the coordinates that are not on the game board
+            foreach (List<int> coor in coordinates)
+            {
+                if (coor[0] >= 0 && coor[0] < this._battlefield.width && coor[1] >= 0 && coor[1] < this._battlefield.height)
                 {
-                    if (this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1]).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1]));
-                    }
-                }
-                // right movement
-                if (currentLocation[0] + i < this._battlefield.width)
-                {
-                    if (this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1]).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1]));
-                    }
-                }
-                // up movement
-                if (currentLocation[1] - i >= 0)
-                {
-                    if (this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] - i).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] - i));
-                    }
-                }
-                // down movement
-                if (currentLocation[1] + i < this._battlefield.height)
-                {
-                    if (this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] + i).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] + i));
-                    }
+                    possibleSquaresInMoveDistance.Add(this._battlefield.GetSquareAt(coor[0], coor[1]));
                 }
             }
-
-            for (var i = 1; i <= this._cardData.diagonalMoveDistance; i++)
+            // Check that no other cards are on the square
+            foreach (Transform sq in possibleSquaresInMoveDistance)
             {
-                // diagonal left up movement
-                if ((currentLocation[0] - i >= 0) && (currentLocation[1] - i >= 0))
+                if (sq.GetComponent<SquareController>().card == null)
                 {
-                    if (this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] - i).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] - i));
-                    }
-                }
-                // diagonal right up movement
-                if ((currentLocation[0] + i < this._battlefield.width) && (currentLocation[1] - i >= 0))
-                {
-                    if (this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] - i).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] - i));
-                    }
-                }
-                // diagonal left down movement
-                if ((currentLocation[0] - i >= 0) && (currentLocation[1] + i < this._battlefield.height))
-                {
-                    if (this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] + i).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] + i));
-                    }
-                }
-                // diagonal left down movement
-                if ((currentLocation[0] + i < this._battlefield.width) && (currentLocation[1] + i < this._battlefield.height))
-                {
-                    if (this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] + i).GetComponent<SquareController>().card == null)
-                    {
-                        squares.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] + i));
-                    }
+                    squares.Add(sq);
                 }
             }
             return squares;
@@ -273,98 +229,55 @@ namespace Assets.Scripts
 
         public List<Transform> SquaresInAttackDistance()
         {			
+            List<Transform> squares = new List<Transform>();
+            List<Transform> possibleSquaresInAttackDistance = new List<Transform>();
+            List<List<int>> coordinates = new List<List<int>>();
+
             if (this.boardLocation == Location.HAND)
             {
-                return new List<Transform>();
+                return squares;
             }
             if (this.boardLocation != Location.BATTLEFIELD)
             {
                 Debug.LogWarning("Card is not on the battlefield!");
                 return null;
             }
+
+            // Card is on the battlefield
             var currentLocation = this.square.GetComponent<SquareController>().battlefieldLocation;
-            var transforms = new List<Transform>();
-
-            for (var i = 1; i <= this._cardData.attackDistance; i++)
+            // Add the coordinates of squares in the attack distance
+            for (int i = 1; i <= this._cardData.attackDistance; i++)
             {
-                // left movement
-                if (currentLocation[0] - i >= 0)
+                coordinates.Add(new List<int> { currentLocation[0] - i, currentLocation[1] });
+                coordinates.Add(new List<int> { currentLocation[0] + i, currentLocation[1] });
+                coordinates.Add(new List<int> { currentLocation[0], currentLocation[1] - i });
+                coordinates.Add(new List<int> { currentLocation[0], currentLocation[1] + i });
+            }
+            for (int i = 1; i <= this._cardData.diagonalAttackDistance; i++)
+            {
+                coordinates.Add(new List<int> { currentLocation[0] - i, currentLocation[1] - i});
+                coordinates.Add(new List<int> { currentLocation[0] - i, currentLocation[1] + i});
+                coordinates.Add(new List<int> { currentLocation[0] + i, currentLocation[1] - i });
+                coordinates.Add(new List<int> { currentLocation[0] + i, currentLocation[1] + i });
+            }
+            // Get rid of the coordinates that are not on the battlefield
+            foreach (List<int> coor in coordinates)
+            {
+                if (coor[0] >= 0 && coor[0] < this._battlefield.width && coor[1] >= 0 && coor[1] < this._battlefield.height)
                 {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1]).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1]));
-                    }
-                }
-                // right movement
-                if (currentLocation[0] + i < this._battlefield.width)
-                {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1]).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1]));
-                    }
-                }
-                // up movement
-                if (currentLocation[1] - i >= 0)
-                {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] - i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(_battlefield.GetSquareAt(currentLocation[0], currentLocation[1] - i));
-                    }
-                }
-                // down movement
-                if (currentLocation[1] + i < this._battlefield.height)
-                {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] + i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0], currentLocation[1] + i));
-                    }
+                    possibleSquaresInAttackDistance.Add(this._battlefield.GetSquareAt(coor[0], coor[1]));
                 }
             }
-
-            for (var i = 1; i <= this._cardData.diagonalAttackDistance; i++)
+            // Get rid of the squares with no units or friendly units on them
+            foreach (Transform sq in possibleSquaresInAttackDistance)
             {
-                // diagonal left up movement
-                if ((currentLocation[0] - i >= 0) && (currentLocation[1] - i >= 0))
+                CardController card = sq.GetComponent<SquareController>().card;
+                if (card != null && card.ownedBy != this.ownedBy)
                 {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] - i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] - i));
-                    }
-                }
-                // diagonal right up movement
-                if ((currentLocation[0] + i < this._battlefield.width) && (currentLocation[1] - i >= 0))
-                {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] - i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] - i));
-                    }
-                }
-                // diagonal left down movement
-                if ((currentLocation[0] - i >= 0) && (currentLocation[1] + i < this._battlefield.height))
-                {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] + i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] - i, currentLocation[1] + i));
-                    }
-                }
-                // diagonal left down movement
-                if ((currentLocation[0] + i < this._battlefield.width) && (currentLocation[1] + i < this._battlefield.height))
-                {
-                    var card = this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] + i).GetComponent<SquareController>().card;
-                    if (card != null && card.GetComponent<CardController>().ownedBy != this.ownedBy)
-                    {
-                        transforms.Add(this._battlefield.GetSquareAt(currentLocation[0] + i, currentLocation[1] + i));
-                    }
+                    squares.Add(sq);
                 }
             }
-            return transforms;
+            return squares;
         }
     }
 }
