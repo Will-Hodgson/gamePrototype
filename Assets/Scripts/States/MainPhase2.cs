@@ -25,12 +25,11 @@ namespace Assets.Scripts
         public override void Enter()
         {
             this._phasePanelText.text = "MainPhase2";
-            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public override void Execute()
         {
-
+            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public override void Exit()

@@ -32,6 +32,17 @@ namespace Assets.Scripts
                     // Move action
                     if (moveSquares.Contains(this.transform))
                     {
+                        if (cardController.ownedBy == Owner.PLAYER && cardController.boardLocation == Location.HAND && 
+                            cardController.GetComponent<CardData>().manaCost <= this._gameState.playerMana)
+                        {
+                            this._gameState.playerMana = this._gameState.playerMana - cardController.GetComponent<CardData>().manaCost;
+                        }
+                        else if (cardController.ownedBy == Owner.ENEMY && cardController.boardLocation == Location.HAND &&
+                            cardController.GetComponent<CardData>().manaCost <= this._gameState.enemyMana)
+                        {
+                            this._gameState.enemyMana = this._gameState.enemyMana - cardController.GetComponent<CardData>().manaCost;
+                        }
+
                         cardController.MoveCard(this.transform);
                         cardController.transform.SetParent(this.transform);
                         cardController.canMove = false;
@@ -40,6 +51,8 @@ namespace Assets.Scripts
 
                 // reset all the squares to clear
                 this._battlefield.ResetSquareBorders();
+                this._gameState.ResetCardColors();
+                this._gameState.ColorPlayableAndMovableCards();
                 this._gameState.selectedCard = null;
             }
         }

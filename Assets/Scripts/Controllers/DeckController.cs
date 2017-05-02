@@ -16,21 +16,25 @@ namespace Assets.Scripts
             for (var i = 0; i < 30; i++)
             {
                 var card = Instantiate(this._cardPrefab);
-                var obj = card.gameObject;
+                var txt = card.GetComponentInChildren<Text>();
+                var cont = card.GetComponent<CardController>();
+                var data = card.GetComponent<CardData>();
+                var canvasGroup = card.GetComponent<CanvasGroup>();
+
                 if (this.gameObject.name == "PlayerDeck")
                 {
-                    obj.GetComponentInChildren<Text>().text = "P" + i.ToString();
-                    obj.GetComponent<CardController>().Init(Owner.PLAYER);
+                    txt.text = "P" + i.ToString() + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();;
+                    cont.Init(Owner.PLAYER);
                     card.SetParent(GameObject.Find("PlayerDeckPanel/PlayerDeck").transform);
                 }
                 else
                 {
-                    obj.GetComponentInChildren<Text>().text = "E" + i.ToString();
-                    obj.GetComponent<CardController>().Init(Owner.ENEMY);
+                    txt.text = "E" + i.ToString() + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
+                    cont.Init(Owner.ENEMY);
                     card.SetParent(GameObject.Find("EnemyDeckPanel/EnemyDeck").transform);
                 }
-                obj.GetComponent<CanvasGroup>().alpha = 0f;
-                obj.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                canvasGroup.alpha = 0f;
+                canvasGroup.blocksRaycasts = false;
                 this._cards.Add(card);
             }
         }

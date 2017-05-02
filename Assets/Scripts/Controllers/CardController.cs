@@ -295,6 +295,11 @@ namespace Assets.Scripts
             this.GetComponent<Image>().color = UnityEngine.Color.green;
         }
 
+        public void ColorBlue()
+        {
+            this.GetComponent<Image>().color = UnityEngine.Color.blue;
+        }
+
         public void ResetColor()
         {
             this.GetComponent<Image>().color = UnityEngine.Color.white;

@@ -29,7 +29,6 @@ namespace Assets.Scripts
             {
                 card.GetComponent<CardController>().ResetStats();
             }
-            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public override void Execute()
@@ -66,6 +65,7 @@ namespace Assets.Scripts
                     cardController.canMove = true;
                 }
             }
+            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public override void Exit()

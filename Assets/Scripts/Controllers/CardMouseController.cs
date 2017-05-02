@@ -42,12 +42,10 @@ namespace Assets.Scripts
             {
                 if (this._cardController.ownedBy == Owner.PLAYER)
                 {
-                    // reset all the squares to clear
-                    this._battlefield.ResetSquareBorders();
-
                     // Check if this card has already been selected, if so deselect it
                     if (IsSelectedCard())
                     {
+                        this._battlefield.ResetSquareBorders();
                         this._gameState.selectedCard = null;
                     }
                     else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
@@ -82,11 +80,10 @@ namespace Assets.Scripts
             {
                 if (this._cardController.ownedBy == Owner.ENEMY)
                 {
-                    // reset all the squares to clear
-                    this._battlefield.ResetSquareBorders();
                     // Check if this card has already been selected, if so deselect it
                     if (IsSelectedCard())
                     {
+                        this._battlefield.ResetSquareBorders();
                         this._gameState.selectedCard = null;
                     }
                     else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
@@ -126,12 +123,16 @@ namespace Assets.Scripts
 
         public void SelectAndColorMoveSquares()
         {
-            if (this._cardController.canMove)
+            if (this._cardController.canMove && (this._cardController.boardLocation == Location.BATTLEFIELD ||
+                (this._cardController.ownedBy == Owner.PLAYER && this._cardController.GetComponent<CardData>().manaCost <= this._gameState.playerMana) ||
+                (this._cardController.ownedBy == Owner.ENEMY && this._cardController.GetComponent<CardData>().manaCost <= this._gameState.enemyMana)))
             {
                 this._gameState.selectedCard = this.transform;
                 // Card selected - show available moves
+                this._battlefield.ResetSquareBorders();
                 this._gameState.ResetCardColors();
-                this._cardController.ColorGreen();
+                this._gameState.ColorPlayableAndMovableCards();
+                this._cardController.ColorBlue();
                 var moveSquares = this.GetComponent<CardController>().SquaresInMoveDistance();
                 foreach (var square in moveSquares)
                 {
@@ -144,13 +145,18 @@ namespace Assets.Scripts
         {
             if (this._cardController.canAttack)
             {
+                var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
+                if (attackSquares.Count == 0)
+                {
+                    return;
+                }
                 this._gameState.selectedCard = this.transform;
-                // Card selected - show available attacks
                 if (this._cardController.boardLocation != Location.BATTLEFIELD)
                     return;
-
-                this._cardController.ColorGreen();
-                var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
+                // Card selected - show available attacks
+                this._gameState.ResetCardColors();
+                this._gameState.ColorAttackableCards();
+                this._cardController.ColorBlue();
                 foreach (var square in attackSquares)
                 {
                     square.GetComponent<SquareController>().card.ColorRed();
