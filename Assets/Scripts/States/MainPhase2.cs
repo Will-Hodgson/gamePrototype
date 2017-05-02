@@ -25,6 +25,7 @@ namespace Assets.Scripts
         public override void Enter()
         {
             this._phasePanelText.text = "MainPhase2";
+            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public override void Execute()
@@ -66,6 +67,7 @@ namespace Assets.Scripts
                     cardController.canMove = false;
                 }
             }
+            this._gameState.ResetCardColors();
         }
 
         public override State NextState()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
@@ -23,6 +24,7 @@ namespace Assets.Scripts
     public class CardController : MonoBehaviour
     {
         private Battlefield _battlefield;
+        private GameStateController _gameState;
         private HandController _handController;
         private GraveyardController _graveyardController;
         private CardData _cardData;
@@ -65,6 +67,7 @@ namespace Assets.Scripts
         void Awake()
         {
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
+            this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
             this._handController = null;
             this._graveyardController = null;
             this._cardData = this.GetComponent<CardData>();
@@ -143,6 +146,8 @@ namespace Assets.Scripts
                 this.boardLocation = Location.BATTLEFIELD;
                 this._battlefield.AddCard(this.transform);
             }
+            this.ResetColor();
+            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public void TakeDamage(int damage)
@@ -278,6 +283,21 @@ namespace Assets.Scripts
                 }
             }
             return squares;
+        }
+
+        public void ColorRed()
+        {
+            this.GetComponent<Image>().color = UnityEngine.Color.red;
+        }
+
+        public void ColorGreen()
+        {
+            this.GetComponent<Image>().color = UnityEngine.Color.green;
+        }
+
+        public void ResetColor()
+        {
+            this.GetComponent<Image>().color = UnityEngine.Color.white;
         }
     }
 }

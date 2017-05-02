@@ -29,6 +29,7 @@ namespace Assets.Scripts
             {
                 card.GetComponent<CardController>().ResetStats();
             }
+            this._gameState.ColorPlayableAndMovableCards();
         }
 
         public override void Execute()
@@ -69,7 +70,7 @@ namespace Assets.Scripts
 
         public override void Exit()
         {
-
+            this._gameState.ResetCardColors();
         }
 
         public override State NextState()

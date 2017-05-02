@@ -35,7 +35,7 @@ namespace Assets.Scripts
 
         public override void Exit()
         {
-
+            
         }
 
         public override State NextState()

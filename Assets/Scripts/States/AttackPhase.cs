@@ -21,6 +21,7 @@ namespace Assets.Scripts
         public override void Enter()
         {
             this._phasePanelText.text = "AttackPhase";
+            this._gameState.ColorAttackableCards();
         }
 
         public override void Execute()
@@ -73,6 +74,7 @@ namespace Assets.Scripts
                     }
                 }
             }
+            this._gameState.ResetCardColors();
         }
 
         public override State NextState()

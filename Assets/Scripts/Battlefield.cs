@@ -82,7 +82,7 @@ namespace Assets.Scripts
         {
             foreach (Transform square in this.GetSquares())
             {
-                square.GetComponent<SquareController>().ColorBoarderClear();
+                square.GetComponent<SquareController>().ColorClear();
             }
         }
     }

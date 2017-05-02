@@ -8,6 +8,8 @@ namespace Assets.Scripts
         private State _turnState;
         private State _phaseState;
         private Battlefield _battlefield;
+        private HandController _playerHandController;
+        private HandController _enemyHandController;
         private Transform _selectedCard;
         private Text _playerManaText;
         private Text _enemyManaText;
@@ -64,6 +66,8 @@ namespace Assets.Scripts
             this._turnState = GameObject.Find("Camera").GetComponent<PlayerTurnState>();
             this._phaseState = GameObject.Find("Camera").GetComponent<MulliganPhase>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
+            this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
+            this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
             this._selectedCard = null;
             this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
             this._enemyManaText = GameObject.Find("EnemyMana").GetComponent<Text>();
@@ -105,6 +109,90 @@ namespace Assets.Scripts
         private void UpdateEnemyManaText()
         {
             this._enemyManaText.text = "Mana:" + this._enemyMana.ToString() + "/" + this._enemyManaMax.ToString();
+        }
+
+        public void ColorPlayableAndMovableCards()
+        {
+            if (this._turnState.Id() == "PlayerTurnState")
+            {
+                foreach (Transform card in this._playerHandController.cards)
+                {
+                    CardController cont = card.GetComponent<CardController>();
+                    if (cont.canMove && card.GetComponent<CardData>().manaCost <= this._playerMana)
+                    {
+                        cont.ColorGreen();
+                    }
+                }
+                foreach (Transform card in this._battlefield.cards)
+                {
+                    CardController cont = card.GetComponent<CardController>();
+                    if (cont.ownedBy == Owner.PLAYER && cont.canMove)
+                    {
+                        cont.ColorGreen();
+                    }
+                }
+            }
+            else
+            {
+                foreach (Transform card in this._enemyHandController.cards)
+                {
+                    CardController cont = card.GetComponent<CardController>();
+                    if (cont.canMove && card.GetComponent<CardData>().manaCost <= this._enemyMana)
+                    {
+                        cont.ColorGreen();
+                    }
+                }
+                foreach (Transform card in this._battlefield.cards)
+                {
+                    CardController cont = card.GetComponent<CardController>();
+                    if (cont.ownedBy == Owner.ENEMY && cont.canMove)
+                    {
+                        cont.ColorGreen();
+                    }
+                }
+            }
+        }
+
+        public void ColorAttackableCards()
+        {
+            if (this._turnState.Id() == "PlayerTurnState")
+            {
+                foreach (Transform card in this._battlefield.cards)
+                {
+                    CardController cont = card.GetComponent<CardController>();
+                    if (cont.ownedBy == Owner.PLAYER && cont.canAttack && cont.SquaresInAttackDistance().Count > 0)
+                    {
+                        cont.ColorGreen();
+                    }
+                }
+            }
+            else
+            {
+                foreach (Transform card in this._battlefield.cards)
+                {
+                    CardController cont = card.GetComponent<CardController>();
+                    if (cont.ownedBy == Owner.ENEMY && cont.canAttack && cont.SquaresInAttackDistance().Count > 0)
+                    {
+                        cont.ColorGreen();
+                    }
+                }
+            }
+        }
+
+        public void ResetCardColors()
+        {
+            foreach (Transform card in this._playerHandController.cards)
+            {
+                card.GetComponent<CardController>().ResetColor();
+            }
+            foreach (Transform card in this._enemyHandController.cards)
+            {
+                card.GetComponent<CardController>().ResetColor();
+            }
+            foreach (Transform card in this._battlefield.cards)
+            {
+                card.GetComponent<CardController>().ResetColor();
+            }
         }
     }
 }

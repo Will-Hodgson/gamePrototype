@@ -72,6 +72,8 @@ namespace Assets.Scripts
                             this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
                             this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
                             this._gameState.selectedCard = null;
+                            this._gameState.ResetCardColors();
+                            this._gameState.ColorAttackableCards();
                         }
                     }
                 }
@@ -109,6 +111,8 @@ namespace Assets.Scripts
                             this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
                             this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
                             this._gameState.selectedCard = null;
+                            this._gameState.ResetCardColors();
+                            this._gameState.ColorAttackableCards();
                         }
                     }
                 }
@@ -126,14 +130,12 @@ namespace Assets.Scripts
             {
                 this._gameState.selectedCard = this.transform;
                 // Card selected - show available moves
-                if (this._cardController.boardLocation == Location.BATTLEFIELD)
-                {
-                    this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
-                }
+                this._gameState.ResetCardColors();
+                this._cardController.ColorGreen();
                 var moveSquares = this.GetComponent<CardController>().SquaresInMoveDistance();
                 foreach (var square in moveSquares)
                 {
-                    square.GetComponent<SquareController>().ColorBoarderGreen();
+                    square.GetComponent<SquareController>().ColorGray();
                 }
             }
         }
@@ -147,11 +149,11 @@ namespace Assets.Scripts
                 if (this._cardController.boardLocation != Location.BATTLEFIELD)
                     return;
 
-                this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
+                this._cardController.ColorGreen();
                 var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
                 foreach (var square in attackSquares)
                 {
-                    square.GetComponent<SquareController>().ColorBoarderRed();
+                    square.GetComponent<SquareController>().card.ColorRed();
                 }
             }
         }

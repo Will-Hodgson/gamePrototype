@@ -27,22 +27,12 @@ namespace Assets.Scripts
             this.card = null;
         }
 
-        public void ColorBoarderRed()
-        {
-            this.gameObject.GetComponent<Image>().color = UnityEngine.Color.red;
-        }
-
-        public void ColorBoarderGreen()
-        {
-            this.gameObject.GetComponent<Image>().color = UnityEngine.Color.green;
-        }
-
-        public void ColorBoarderGray()
+        public void ColorGray()
         {
             this.gameObject.GetComponent<Image>().color = UnityEngine.Color.gray;
         }
 
-        public void ColorBoarderClear()
+        public void ColorClear()
         {
             this.gameObject.GetComponent<Image>().color = UnityEngine.Color.clear;
         }
