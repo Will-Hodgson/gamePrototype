@@ -40,155 +40,128 @@ namespace Assets.Scripts
         {
             if (this._gameState.turnState.Id() == "PlayerTurnState")
             {
-                if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
+                if (this._cardController.ownedBy == Owner.PLAYER)
                 {
-                    if (this._cardController.ownedBy == Owner.PLAYER)
+                    // reset all the squares to clear
+                    this._battlefield.ResetSquareBorders();
+
+                    // Check if this card has already been selected, if so deselect it
+                    if (IsSelectedCard())
+                    {
+                        this._gameState.selectedCard = null;
+                    }
+                    else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
                     {
                         // Clicked on player's card during player's main phase
-                        // reset all the squares to clear
-                        this._battlefield.ResetSquareBorders();
-
-                        // Check if this card has already been selected, if so deselect it
-                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
-                        {
-                            this._gameState.selectedCard = null;
-                        }
-                        else if (this._cardController.canMove)
+                        if (this._cardController.canMove)
                         {
                             this._gameState.selectedCard = this.transform;
                             // Card selected - show available moves
-                            if (this._cardController.boardLocation == Location.BATTLEFIELD)
-                            {
-                                this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
-                            }
-                            var moveSquares = this.GetComponent<CardController>().SquaresInMoveDistance();
-                            foreach (var square in moveSquares)
-                            {
-                                square.GetComponent<SquareController>().ColorBoarderGreen();
-                            }
+                            ColorMoveSquares();
+                        }
+                    }
+                    else
+                    {
+                        // Clicked on player's card during player's attack phase
+                        if (this._cardController.canAttack)
+                        {
+                            this._gameState.selectedCard = this.transform;
+                            // Card selected - show available attacks
+                            ColorAttackSquares();
                         }
                     }
                 }
                 else
                 {
-                    if (this._cardController.ownedBy == Owner.PLAYER)
+                    // Clicked on enemy's card during player's attack phase
+                    if (this._gameState.selectedCard != null)
                     {
-                        // Clicked on player's card during player's attack phase
-                        // reset all the squares to clear
-                        this._battlefield.ResetSquareBorders();
-
-                        // Check if this card has already been selected, if so deselect it
-                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+                        // This card is being attacked
+                        if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                         {
+                            this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
+                            this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
                             this._gameState.selectedCard = null;
-                        }
-                        else if (this._cardController.canAttack)
-                        {
-                            this._gameState.selectedCard = this.transform;
-                            // Card selected - show available attacks
-                            if (this._cardController.boardLocation == Location.BATTLEFIELD)
-                            {
-                                this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
-                            }
-
-                            var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
-                            foreach (var square in attackSquares)
-                            {
-                                square.GetComponent<SquareController>().ColorBoarderRed();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Clicked on enemy's card during player's attack phase
-                        if (this._gameState.selectedCard != null)
-                        {
-                            // This card is being attacked
-                            if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
-                            {
-                                this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
-                                this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
-                                this._gameState.selectedCard = null;
-                            }
                         }
                     }
                 }
             }
             else
             {
-                if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
+                if (this._cardController.ownedBy == Owner.ENEMY)
                 {
-                    if (this._cardController.ownedBy == Owner.ENEMY)
+                    // reset all the squares to clear
+                    this._battlefield.ResetSquareBorders();
+                    // Check if this card has already been selected, if so deselect it
+                    if (IsSelectedCard())
+                    {
+                        this._gameState.selectedCard = null;
+                    }
+                    else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
                     {
                         // Clicked on enemy's card during enemy's main phase
-                        // reset all the squares to clear
-                        this._battlefield.ResetSquareBorders();
-
-                        // Check if this card has already been selected, if so deselect it
-                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
-                        {
-                            this._gameState.selectedCard = null;
-                        }
-                        else if (this._cardController.canMove)
+                        if (this._cardController.canMove)
                         {
                             this._gameState.selectedCard = this.transform;
                             // Card selected - show available moves
-                            if (this._cardController.boardLocation == Location.BATTLEFIELD)
-                            {
-                                this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
-                            }
-                            var moveSquares = this.GetComponent<CardController>().SquaresInMoveDistance();
-                            foreach (var square in moveSquares)
-                            {
-                                square.GetComponent<SquareController>().ColorBoarderGreen();
-                            }
+                            ColorMoveSquares();
+                        }
+                    }
+                    else
+                    {
+                        // Clicked on enemy's card during enemy's attack phase
+                        if (this._cardController.canAttack)
+                        {
+                            this._gameState.selectedCard = this.transform;
+                            // Card selected - show available attacks
+                            ColorAttackSquares();
                         }
                     }
                 }
                 else
                 {
-                    if (this._cardController.ownedBy == Owner.ENEMY)
+                    // Clicked on player's card during enemy's attack phase
+                    if (this._gameState.selectedCard != null)
                     {
-                        // Clicked on enemy's card during enemy's attack phase
-                        // reset all the squares to clear
-                        this._battlefield.ResetSquareBorders();
-
-                        // Check if this card has already been selected, if so deselect it
-                        if (this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+                        // This card is being attacked
+                        if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                         {
+                            this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
+                            this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
                             this._gameState.selectedCard = null;
-                        }
-                        else if (this._cardController.canAttack)
-                        {
-                            this._gameState.selectedCard = this.transform;
-                            // Card selected - show available attacks
-                            if (this._cardController.boardLocation == Location.BATTLEFIELD)
-                            {
-                                this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
-                            }
-
-                            var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
-                            foreach (var square in attackSquares)
-                            {
-                                square.GetComponent<SquareController>().ColorBoarderRed();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Clicked on player's card during enemy's attack phase
-                        if (this._gameState.selectedCard != null)
-                        {
-                            // This card is being attacked
-                            if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
-                            {
-                                this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
-                                this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
-                                this._gameState.selectedCard = null;
-                            }
                         }
                     }
                 }
+            }
+        }
+            
+        public bool IsSelectedCard()
+        {
+            return this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID();
+        }
+
+        public void ColorMoveSquares()
+        {
+            if (this._cardController.boardLocation == Location.BATTLEFIELD)
+            {
+                this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
+            }
+            var moveSquares = this.GetComponent<CardController>().SquaresInMoveDistance();
+            foreach (var square in moveSquares)
+            {
+                square.GetComponent<SquareController>().ColorBoarderGreen();
+            }
+        }
+
+        public void ColorAttackSquares()
+        {
+            if (this._cardController.boardLocation != Location.BATTLEFIELD) return;
+
+            this._cardController.square.GetComponent<SquareController>().ColorBoarderGray();
+            var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
+            foreach (var square in attackSquares)
+            {
+                square.GetComponent<SquareController>().ColorBoarderRed();
             }
         }
     }
