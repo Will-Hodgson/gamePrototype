@@ -46,6 +46,8 @@ namespace Assets.Scripts
                     if (IsSelectedCard())
                     {
                         this._battlefield.ResetSquareBorders();
+                        this._gameState.ResetCardColors();
+                        this._gameState.ColorPlayableAndMovableCards();
                         this._gameState.selectedCard = null;
                     }
                     else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
@@ -84,6 +86,8 @@ namespace Assets.Scripts
                     if (IsSelectedCard())
                     {
                         this._battlefield.ResetSquareBorders();
+                        this._gameState.ResetCardColors();
+                        this._gameState.ColorPlayableAndMovableCards();
                         this._gameState.selectedCard = null;
                     }
                     else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
