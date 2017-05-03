@@ -38,83 +38,41 @@ namespace Assets.Scripts
 
         public void OnPointerDown(PointerEventData data)
         {
-            if (this._gameState.turnState.Id() == "PlayerTurnState")
+            // Check if this card has already been selected, if so deselect it
+            if (IsSelectedCard())
             {
-                if (this._cardController.ownedBy == Owner.PLAYER)
+                this._battlefield.ResetSquareBorders();
+                this._gameState.ResetCardColors();
+                this._gameState.ColorPlayableAndMovableCards();
+                this._gameState.selectedCard = null;
+            }
+            else if ((this._gameState.turnState.Id() == "PlayerTurnState" && this._cardController.ownedBy == Owner.PLAYER) ||
+                (this._gameState.turnState.Id() == "EnemyTurnState" && this._cardController.ownedBy == Owner.ENEMY))
+            {
+                if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
                 {
-                    // Check if this card has already been selected, if so deselect it
-                    if (IsSelectedCard())
-                    {
-                        this._battlefield.ResetSquareBorders();
-                        this._gameState.ResetCardColors();
-                        this._gameState.ColorPlayableAndMovableCards();
-                        this._gameState.selectedCard = null;
-                    }
-                    else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
-                    {
-                        // Clicked on player's card during player's main phase
-                        SelectAndColorMoveSquares();
-                    }
-                    else
-                    {
-                        // Clicked on player's card during player's attack phase
-                        SelectAndColorAttackSquares();
-                    }
+                    // Clicked on player's card during player's main phase
+                    SelectAndColorMoveSquares();
                 }
                 else
                 {
-                    // Clicked on enemy's card during player's attack phase
-                    if (this._gameState.selectedCard != null)
-                    {
-                        // This card is being attacked
-                        if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
-                        {
-                            this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
-                            this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
-                            this._gameState.selectedCard = null;
-                            this._gameState.ResetCardColors();
-                            this._gameState.ColorAttackableCards();
-                        }
-                    }
+                    // Clicked on player's card during player's attack phase
+                    SelectAndColorAttackSquares();
                 }
             }
             else
             {
-                if (this._cardController.ownedBy == Owner.ENEMY)
+                // Clicked on opposing player's card during attack phase
+                if (this._gameState.selectedCard != null)
                 {
-                    // Check if this card has already been selected, if so deselect it
-                    if (IsSelectedCard())
+                    // This card is being attacked
+                    if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
                     {
-                        this._battlefield.ResetSquareBorders();
-                        this._gameState.ResetCardColors();
-                        this._gameState.ColorPlayableAndMovableCards();
+                        this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
+                        this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
                         this._gameState.selectedCard = null;
-                    }
-                    else if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
-                    {
-                        // Clicked on enemy's card during enemy's main phase
-                        SelectAndColorMoveSquares();
-                    }
-                    else
-                    {
-                        // Clicked on enemy's card during enemy's attack phase
-                        SelectAndColorAttackSquares();
-                    }
-                }
-                else
-                {
-                    // Clicked on player's card during enemy's attack phase
-                    if (this._gameState.selectedCard != null)
-                    {
-                        // This card is being attacked
-                        if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
-                        {
-                            this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
-                            this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
-                            this._gameState.selectedCard = null;
-                            this._gameState.ResetCardColors();
-                            this._gameState.ColorAttackableCards();
-                        }
+                        this._gameState.ResetCardColors();
+                        this._gameState.ColorAttackableCards();
                     }
                 }
             }
