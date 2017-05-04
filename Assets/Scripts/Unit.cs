@@ -89,36 +89,22 @@ namespace Assets.Scripts
             set { this._maxDiagonalMoveDistance = value; }
         }
 
-        public override void Awake() 
+        public void Init(string nm, int mc, int hl, int at, int ad, int dad, int md, int dmd)
         {
-        }
-
-        public override void OnPlayCard()
-        {
-        }
-
-        public void OnEnterBattlefield()
-        {
-        }
-
-        public void OnUpkeep()
-        {
-        }
-
-        public void OnEndTurn()
-        {
-        }
-
-        public void OnAttack()
-        {
-        }
-
-        public void OnDealtDamage()
-        {
-        }
-
-        public void OnDealDamage()
-        {
+            name = nm;
+            manaCost = mc;
+            health = hl;
+            attack = at;
+            attackDistance = ad;
+            diagonalAttackDistance = dad;
+            moveDistance = md;
+            diagonalMoveDistance = dmd;
+            maxHealth = health;
+            maxAttack = attack;
+            maxAttackDistance = attackDistance;
+            maxDiagonalAttackDistance = diagonalAttackDistance;
+            maxMoveDistance = moveDistance;
+            maxDiagonalMoveDistance = diagonalMoveDistance;
         }
 
         public void Reset()

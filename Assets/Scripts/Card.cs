@@ -5,6 +5,7 @@ namespace Assets.Scripts
     public class Card : MonoBehaviour
     {
         private int _manaCost;
+        private string _name;
 
         public int manaCost
         {
@@ -12,8 +13,10 @@ namespace Assets.Scripts
             set { this._manaCost = value; }
         }
 
-        public virtual void Awake() 
+        public string name
         {
+            get { return this._name; }
+            set { this._name = value; }
         }
 
         public virtual void OnPlayCard()

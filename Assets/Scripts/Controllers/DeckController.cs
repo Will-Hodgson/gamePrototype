@@ -9,6 +9,7 @@ namespace Assets.Scripts
     {
         [SerializeField] private Transform _cardPrefab;
         private List<Transform> _cards;
+        private Deck _deck;
 
         void Awake()
         {
@@ -37,6 +38,11 @@ namespace Assets.Scripts
                 canvasGroup.blocksRaycasts = false;
                 this._cards.Add(card);
             }
+        }
+
+        public void Init(List<string> cardList)
+        {
+            this._deck = DeckFactory.CreateDeck(cardList);
         }
 
         public Transform DrawCard()

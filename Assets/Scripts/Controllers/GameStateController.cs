@@ -10,6 +10,8 @@ namespace Assets.Scripts
         private Battlefield _battlefield;
         private HandController _playerHandController;
         private HandController _enemyHandController;
+        private DeckController _playerDeckController;
+        private DeckController _enemyDeckController;
         private Transform _selectedCard;
         private Text _playerManaText;
         private Text _enemyManaText;
@@ -68,6 +70,8 @@ namespace Assets.Scripts
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
             this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
+            this._playerDeckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<DeckController>();
+            this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<DeckController>();
             this._selectedCard = null;
             this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
             this._enemyManaText = GameObject.Find("EnemyMana").GetComponent<Text>();
