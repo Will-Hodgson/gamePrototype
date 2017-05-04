@@ -9,7 +9,6 @@ namespace Assets.Scripts
     {
         [SerializeField] private Transform _cardPrefab;
         private List<Transform> _cards;
-        private Deck _deck;
 
         void Awake()
         {
@@ -42,7 +41,36 @@ namespace Assets.Scripts
 
         public void Init(List<string> cardList)
         {
-            this._deck = DeckFactory.CreateDeck(cardList);
+            if (this.gameObject.name == "PlayerDeck")
+            {
+                foreach (string str in cardList)
+                {
+                    CardController card = CardFactory.CreateCard(str).GetComponent<CardController>();
+                    CardData data = card.GetComponent<CardData>();
+                    CanvasGroup canvasGroup = card.GetComponent<CanvasGroup>();
+                    card.GetComponentInChildren<Text>().text = data.name + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
+                    card.Init(Owner.PLAYER);
+                    card.transform.SetParent(GameObject.Find("PlayerDeckPanel/PlayerDeck").transform);
+                    canvasGroup.alpha = 0f;
+                    canvasGroup.blocksRaycasts = false;
+                    this._cards.Add(card.transform);
+                }
+            }
+            else
+            {
+                foreach (string str in cardList)
+                {
+                    CardController card = CardFactory.CreateCard(str).GetComponent<CardController>();
+                    CardData data = card.GetComponent<CardData>();
+                    CanvasGroup canvasGroup = card.GetComponent<CanvasGroup>();
+                    card.GetComponentInChildren<Text>().text = data.name + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
+                    card.Init(Owner.ENEMY);
+                    card.transform.SetParent(GameObject.Find("EnemyDeckPanel/EnemyDeck").transform);
+                    canvasGroup.alpha = 0f;
+                    canvasGroup.blocksRaycasts = false;
+                    this._cards.Add(card.transform);
+                }
+            }
         }
 
         public Transform DrawCard()
