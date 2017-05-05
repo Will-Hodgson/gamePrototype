@@ -10,43 +10,16 @@ namespace Assets.Scripts
         [SerializeField] private Transform _cardPrefab;
         private List<Transform> _cards;
 
-        void Awake()
-        {
-            this._cards = new List<Transform>();
-            for (var i = 0; i < 30; i++)
-            {
-                var card = Instantiate(this._cardPrefab);
-                var txt = card.GetComponentInChildren<Text>();
-                var cont = card.GetComponent<CardController>();
-                var data = card.GetComponent<CardData>();
-                var canvasGroup = card.GetComponent<CanvasGroup>();
-
-                if (this.gameObject.name == "PlayerDeck")
-                {
-                    txt.text = "P" + i.ToString() + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();;
-                    cont.Init(Owner.PLAYER);
-                    card.SetParent(GameObject.Find("PlayerDeckPanel/PlayerDeck").transform);
-                }
-                else
-                {
-                    txt.text = "E" + i.ToString() + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
-                    cont.Init(Owner.ENEMY);
-                    card.SetParent(GameObject.Find("EnemyDeckPanel/EnemyDeck").transform);
-                }
-                canvasGroup.alpha = 0f;
-                canvasGroup.blocksRaycasts = false;
-                this._cards.Add(card);
-            }
-        }
-
         public void Init(List<string> cardList)
         {
+            this._cards = new List<Transform>();
+            CardFactory factory = new CardFactory();
             if (this.gameObject.name == "PlayerDeck")
             {
                 foreach (string str in cardList)
                 {
-                    CardController card = CardFactory.CreateCard(str).GetComponent<CardController>();
-                    CardData data = card.GetComponent<CardData>();
+                    CardController card = factory.CreateCard(str).GetComponent<CardController>();
+                    Unit data = card.GetComponent<Unit>();
                     CanvasGroup canvasGroup = card.GetComponent<CanvasGroup>();
                     card.GetComponentInChildren<Text>().text = data.name + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
                     card.Init(Owner.PLAYER);
@@ -60,8 +33,8 @@ namespace Assets.Scripts
             {
                 foreach (string str in cardList)
                 {
-                    CardController card = CardFactory.CreateCard(str).GetComponent<CardController>();
-                    CardData data = card.GetComponent<CardData>();
+                    CardController card = factory.CreateCard(str).GetComponent<CardController>();
+                    Unit data = card.GetComponent<Unit>();
                     CanvasGroup canvasGroup = card.GetComponent<CanvasGroup>();
                     card.GetComponentInChildren<Text>().text = data.name + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
                     card.Init(Owner.ENEMY);

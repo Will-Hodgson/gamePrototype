@@ -116,5 +116,9 @@ namespace Assets.Scripts
             this._moveDistance = this._maxMoveDistance;
             this._diagonalMoveDistance = this._maxDiagonalMoveDistance;
         }
+
+        public override void OnPlayCard()
+        {
+        }
     }
 }

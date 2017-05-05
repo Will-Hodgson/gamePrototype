@@ -6,31 +6,29 @@ namespace Assets.Scripts
 {
     public class CardFactory
     {
-        [SerializeField] private static Transform _cardPrefab;
-
-        public static Card CreateCard(string cardName)
+        public Transform CreateCard(string cardName)
         {
-            Transform card = GameObject.Instantiate(CardFactory._cardPrefab);
-            card.gameObject.SetActive(false);
+            GameObject cardPrefab = Resources.Load("Prefabs/Card", typeof(GameObject)) as GameObject;
+            Transform card = GameObject.Instantiate(cardPrefab.transform);
 
             XmlDocument doc = new XmlDocument();
-            doc.Load(Application.dataPath + "/Cards/" + cardName + ".xml");
+            doc.Load(Application.dataPath + "/Resources/Cards/" + cardName + ".xml");
             XmlNode node = doc.DocumentElement.SelectSingleNode("/card");
 
-            string name = node.Attributes["name"].Value;
-            int manaCost = int.Parse(node.Attributes["manaCost"].Value);
+            string name = doc.DocumentElement.SelectSingleNode("/card/name").InnerText;
+            int manaCost = int.Parse(doc.DocumentElement.SelectSingleNode("/card/manaCost").InnerText);
 
-            if (node.Attributes["type"].Value == "Unit")
+            if (doc.DocumentElement.SelectSingleNode("/card/type").InnerText == "Unit")
             {
-                int health = int.Parse(node.Attributes["health"].Value);
-                int attack = int.Parse(node.Attributes["attack"].Value);
-                int attackDistance = int.Parse(node.Attributes["attackDistance"].Value);
-                int diagonalAttackDistance = int.Parse(node.Attributes["diagonalAttackDistance"].Value);
-                int moveDistance = int.Parse(node.Attributes["moveDistance"].Value);
-                int diagonalMoveDistance = int.Parse(node.Attributes["diagonalMoveDistance"].Value);
-                Unit unit = new Unit();
+                int health = int.Parse(doc.DocumentElement.SelectSingleNode("/card/health").InnerText);
+                int attack = int.Parse(doc.DocumentElement.SelectSingleNode("/card/attack").InnerText);
+                int attackDistance = int.Parse(doc.DocumentElement.SelectSingleNode("/card/attackDistance").InnerText);
+                int diagonalAttackDistance = int.Parse(doc.DocumentElement.SelectSingleNode("/card/diagonalAttackDistance").InnerText);
+                int moveDistance = int.Parse(doc.DocumentElement.SelectSingleNode("/card/moveDistance").InnerText);
+                int diagonalMoveDistance = int.Parse(doc.DocumentElement.SelectSingleNode("/card/diagonalMoveDistance").InnerText);
+                Unit unit = card.gameObject.AddComponent<Unit>();
                 unit.Init(name, manaCost, health, attack, attackDistance, diagonalAttackDistance, moveDistance, diagonalMoveDistance);
-                return unit;
+                return card;
             }
             else
             {

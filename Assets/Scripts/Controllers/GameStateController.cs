@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -79,6 +81,8 @@ namespace Assets.Scripts
 
         void Start()
         {
+            this._playerDeckController.Init(Enumerable.Repeat("TestUnit", 30).ToList());
+            this._enemyDeckController.Init(Enumerable.Repeat("TestUnit", 30).ToList());
             this._phaseState.Enter();
             this._phaseState.Execute();
         }

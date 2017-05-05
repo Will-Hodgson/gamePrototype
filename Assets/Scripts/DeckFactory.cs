@@ -11,7 +11,7 @@ namespace Assets.Scripts
             Deck deck = new Deck();
             foreach (string str in deckList)
             {
-                deck.AddCard(CardFactory.CreateCard(str));
+                //deck.AddCard(CardFactory.CreateCard(str));
             }
             return deck;
         }

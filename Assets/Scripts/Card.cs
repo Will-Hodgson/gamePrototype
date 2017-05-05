@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts
 {
-    public class Card : MonoBehaviour
+    public abstract class Card : MonoBehaviour
     {
         private int _manaCost;
         private string _name;
@@ -19,8 +19,6 @@ namespace Assets.Scripts
             set { this._name = value; }
         }
 
-        public virtual void OnPlayCard()
-        {
-        }
+        public abstract void OnPlayCard();
     }
 }
