@@ -7,39 +7,21 @@ namespace Assets.Scripts
 {
     public class GameStateController : MonoBehaviour
     {
-        private State _turnState;
-        private State _phaseState;
         private Battlefield _battlefield;
         private HandController _playerHandController;
         private HandController _enemyHandController;
         private DeckController _playerDeckController;
         private DeckController _enemyDeckController;
-        private Transform _selectedCard;
         private Text _playerManaText;
         private Text _enemyManaText;
-
         private int _playerMana = 0;
         private int _playerManaMax = 0;
         private int _enemyMana = 0;
         private int _enemyManaMax = 0;
 
-        public State turnState
-        {
-            get { return this._turnState; }
-            private set { this._turnState = value; }
-        }
-
-        public State phaseState
-        {
-            get { return this._phaseState; }
-            private set { this._phaseState = value; }
-        }
-
-        public Transform selectedCard
-        {
-            get { return this._selectedCard; }
-            set { this._selectedCard = value; }
-        }
+        public State turnState { get; set; }
+        public State phaseState { get; set; }
+        public Transform selectedCard { get; set; }
 
         public int playerMana
         {
@@ -67,14 +49,14 @@ namespace Assets.Scripts
 
         void Awake()
         {
-            this._turnState = GameObject.Find("Camera").GetComponent<PlayerTurnState>();
-            this._phaseState = GameObject.Find("Camera").GetComponent<MulliganPhase>();
+            this.turnState = GameObject.Find("Camera").GetComponent<PlayerTurnState>();
+            this.phaseState = GameObject.Find("Camera").GetComponent<MulliganPhase>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
             this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
             this._playerDeckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<DeckController>();
             this._enemyDeckController = GameObject.Find("EnemyDeckPanel/EnemyDeck").GetComponent<DeckController>();
-            this._selectedCard = null;
+            this.selectedCard = null;
             this._playerManaText = GameObject.Find("PlayerMana").GetComponent<Text>();
             this._enemyManaText = GameObject.Find("EnemyMana").GetComponent<Text>();
         }
@@ -83,30 +65,30 @@ namespace Assets.Scripts
         {
             this._playerDeckController.Init(Enumerable.Repeat("TestUnit", 30).ToList());
             this._enemyDeckController.Init(Enumerable.Repeat("TestUnit", 30).ToList());
-            this._phaseState.Enter();
-            this._phaseState.Execute();
+            this.phaseState.Enter();
+            this.phaseState.Execute();
         }
 
         public void ChangeState()
         {
-            this._selectedCard = null;
+            this.selectedCard = null;
             this._battlefield.ResetSquareBorders();
-            this._phaseState.Exit();
-            if (this._phaseState.Id() == "MulliganPhase")
+            this.phaseState.Exit();
+            if (this.phaseState.Id() == "MulliganPhase")
             {
-                this._turnState.Enter();
-                this._turnState.Execute();
+                this.turnState.Enter();
+                this.turnState.Execute();
             }
-            else if (this._phaseState.Id() == "MainPhase2")
+            else if (this.phaseState.Id() == "MainPhase2")
             {
-                this._turnState.Exit();
-                this._turnState = this._turnState.NextState();
-                this._turnState.Enter();
-                this._turnState.Exit();
+                this.turnState.Exit();
+                this.turnState = this.turnState.NextState();
+                this.turnState.Enter();
+                this.turnState.Exit();
             }
-            this._phaseState = this._phaseState.NextState();
-            this._phaseState.Enter();
-            this._phaseState.Execute();
+            this.phaseState = this.phaseState.NextState();
+            this.phaseState.Enter();
+            this.phaseState.Execute();
         }
 
         private void UpdatePlayerManaText()
@@ -121,7 +103,7 @@ namespace Assets.Scripts
 
         public void ColorPlayableAndMovableCards()
         {
-            if (this._turnState.Id() == "PlayerTurnState")
+            if (this.turnState.Id() == "PlayerTurnState")
             {
                 foreach (Transform card in this._playerHandController.cards)
                 {
@@ -163,7 +145,7 @@ namespace Assets.Scripts
 
         public void ColorAttackableCards()
         {
-            if (this._turnState.Id() == "PlayerTurnState")
+            if (this.turnState.Id() == "PlayerTurnState")
             {
                 foreach (Transform card in this._battlefield.cards)
                 {

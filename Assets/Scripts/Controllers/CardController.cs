@@ -28,41 +28,11 @@ namespace Assets.Scripts
         private HandController _handController;
         private GraveyardController _graveyardController;
         private CardData _cardData;
-        private Owner _ownedBy;
-        private Location _boardLocation;
-        private Transform _square;
-        private bool _canMove;
-        private bool _canAttack;
-
-        public Owner ownedBy
-        { 
-            get { return this._ownedBy; }
-            set { this._ownedBy = value; }
-        }
-
-        public Location boardLocation
-        { 
-            get { return this._boardLocation; }
-            set { this._boardLocation = value; }
-        }
-
-        public Transform square
-        {
-            get { return this._square; }
-            set { this._square = value; }
-        }
-
-        public bool canMove
-        {
-            get { return this._canMove; }
-            set { this._canMove = value; }
-        }
-
-        public bool canAttack
-        {
-            get { return this._canAttack; }
-            set { this._canAttack = value; }
-        }
+        public Owner ownedBy { get; set; }
+        public Location boardLocation { get; set; }
+        public Transform square { get; set; }
+        public bool canMove { get; set; }
+        public bool canAttack { get; set; }
 
         void Awake()
         {
@@ -78,7 +48,7 @@ namespace Assets.Scripts
         public void Init(Owner owner)
         {
             this.ownedBy = owner;
-            if (this._ownedBy == Owner.PLAYER)
+            if (this.ownedBy == Owner.PLAYER)
             {
                 this._handController = GameObject.Find("PlayerHand").GetComponent<HandController>();
                 this._graveyardController = GameObject.Find("PlayerGraveyardPanel/PlayerGraveyard").GetComponent<GraveyardController>();
@@ -104,14 +74,14 @@ namespace Assets.Scripts
             {
                 this._handController.RemoveCard(this.transform);
             }
-            this._square.GetComponent<SquareController>().card = null;
-            this._square = null;
+            this.square.GetComponent<SquareController>().card = null;
+            this.square = null;
             this._graveyardController.AddCard(this.transform);
         }
 
         public void MoveCard(Transform square)
         {
-            if (this._canMove == false)
+            if (this.canMove == false)
             {
                 Debug.LogWarning("Trying to move a card that has already moved this turn");
                 return;
