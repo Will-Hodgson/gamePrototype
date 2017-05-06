@@ -44,8 +44,7 @@ namespace Assets.Scripts
 
         public void RemoveUnit()
         {
-            this._unitController = null;
-            this._cardController = null;
+            this.RemoveCard();
         }
 
         public void ColorGray()

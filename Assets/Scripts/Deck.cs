@@ -18,12 +18,12 @@ namespace Assets.Scripts
             return this._deck.Count;
         }
 
-        public void AddCard(Card card)
+        public void Add(Card card)
         {
             this._deck.Add(card);
         }
 
-        public void RemoveCard(Card card)
+        public void Remove(Card card)
         {
             this._deck.Remove(card);
         }

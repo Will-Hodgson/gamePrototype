@@ -6,7 +6,7 @@ namespace Assets.Scripts
 {
     public class DeckFactory : MonoBehaviour
     {
-        public static Deck CreateDeck(List<string> deckList)
+        public Deck CreateDeck(List<string> deckList)
         {
             Deck deck = new Deck();
             foreach (string str in deckList)

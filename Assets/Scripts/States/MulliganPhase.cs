@@ -63,83 +63,72 @@ namespace Assets.Scripts
 
         public void PlayerMulligan()
         {
-            List<Transform> temp = new List<Transform>();
-            foreach (Transform card in this._playerHandController.cards)
-            {
-                temp.Add(card);
-            }
-
-            foreach (Transform card in temp)
-            {
-                this._playerHandController.RemoveCard(card);
-                this._playerDeckController.ReplaceCard(card);
-            }
-
-            // Draw 7 cards
-            for (int i = 0; i < 7; i++)
-            {
-                this._playerHandController.AddCard(this._playerDeckController.DrawCard());
-            }
-
-            this._playerMulliganButton.gameObject.SetActive(false);
-            this._playerKeepCardsButton.gameObject.SetActive(false);
-
-            this._playerButtonClicked = true;
-            if (this._enemyButtonClicked)
-            {
-                this._gameState.ChangeState();
-            }
+            this.Mulligan("Player");
         }
 
         public void EnemyMulligan()
         {
+            this.Mulligan("Enemy");
+        }
+
+        private void Mulligan(string player)
+        {
             List<Transform> temp = new List<Transform>();
-            foreach (Transform card in this._enemyHandController.cards)
+            HandController handController = this._enemyHandController;
+            DeckController deckController = this._enemyDeckController;
+            if (player == "Player")
+            {
+                handController = this._playerHandController;
+                deckController = this._playerDeckController;
+            }
+            foreach (Transform card in handController.cards)
             {
                 temp.Add(card);
             }
 
             foreach (Transform card in temp)
             {
-                this._enemyHandController.RemoveCard(card);
-                this._enemyDeckController.ReplaceCard(card);
+                handController.RemoveCard(card);
+                deckController.ReplaceCard(card);
             }
 
             // Draw 7 cards
             for (int i = 0; i < 7; i++)
             {
-                this._enemyHandController.AddCard(this._enemyDeckController.DrawCard());
+                handController.AddCard(deckController.DrawCard());
             }
 
-            this._enemyMulliganButton.gameObject.SetActive(false);
-            this._enemyKeepCardsButton.gameObject.SetActive(false);
-
-            this._enemyButtonClicked = true;
-            if (this._playerButtonClicked)
-            {
-                this._gameState.ChangeState();
-            }
+            this.ClickButton(player);
         }
 
         public void PlayerKeepCards()
         {
-            this._playerMulliganButton.gameObject.SetActive(false);
-            this._playerKeepCardsButton.gameObject.SetActive(false);
-
-            this._playerButtonClicked = true;
-            if (this._enemyButtonClicked)
-            {
-                this._gameState.ChangeState();
-            }
+            this.ClickButton("Player");
         }
 
         public void EnemyKeepCards()
         {
-            this._enemyMulliganButton.gameObject.SetActive(false);
-            this._enemyKeepCardsButton.gameObject.SetActive(false);
+            this.ClickButton("Enemy");
+        }
+            
+        private void ClickButton(string player)
+        {
+            Transform mulliganButton = this._enemyMulliganButton;
+            Transform keepCardsButton = this._enemyKeepCardsButton;
+            bool buttonClicked = this._enemyButtonClicked;
+            bool otherButtonClicked = this._playerButtonClicked;
+            if (player == "Player")
+            {
+                mulliganButton = this._playerMulliganButton;
+                keepCardsButton = this._playerKeepCardsButton;
+                buttonClicked = this._playerButtonClicked;
+                otherButtonClicked = this._enemyButtonClicked;
+            }
+            mulliganButton.gameObject.SetActive(false);
+            keepCardsButton.gameObject.SetActive(false);
 
-            this._enemyButtonClicked = true;
-            if (this._playerButtonClicked)
+            buttonClicked = true;
+            if (otherButtonClicked)
             {
                 this._gameState.ChangeState();
             }

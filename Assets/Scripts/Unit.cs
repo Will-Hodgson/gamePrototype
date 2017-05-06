@@ -43,17 +43,17 @@ namespace Assets.Scripts
             this._abilities = abilities;
         }
 
-        public bool HasAbility(Ability ability)
+        public bool Has(Ability ability)
         {
             return this._abilities.Contains(ability);
         }
 
-        public void AddAbility(Ability ability)
+        public void Add(Ability ability)
         {
             this._abilities.Add(ability);
         }
             
-        public void RemoveAbility(Ability ability)
+        public void Remove(Ability ability)
         {
             this._abilities.Remove(ability);
         }

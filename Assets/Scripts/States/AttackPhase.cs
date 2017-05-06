@@ -25,61 +25,36 @@ namespace Assets.Scripts
 
         public override void Execute()
         {
-            if (this._gameState.turnState.Id() == "PlayerTurnState")
-            {
-                foreach (Transform card in this._battlefield.cards)
-                {
-                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
-                    if (unitController.ownedBy == Owner.PLAYER)
-                    {
-                        unitController.canAttack = true;
-                    }
-                }
-            }
-            else
-            {
-                foreach (Transform card in this._battlefield.cards)
-                {
-                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
-                    if (unitController.ownedBy == Owner.ENEMY)
-                    {
-                        unitController.canAttack = true;
-                    }
-                }
-            }
+            this.UpdateAttackable(true);
             this._gameState.ColorAttackableCards();
         }
 
         public override void Exit()
         {
-            if (this._gameState.turnState.Id() == "PlayerTurnState")
-            {
-                foreach (Transform card in this._battlefield.cards)
-                {
-                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
-                    if (unitController.ownedBy == Owner.PLAYER)
-                    {
-                        unitController.canAttack = false;
-                    }
-                }
-            }
-            else
-            {
-                foreach (Transform card in this._battlefield.cards)
-                {
-                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
-                    if (unitController.ownedBy == Owner.ENEMY)
-                    {
-                        unitController.canAttack = false;
-                    }
-                }
-            }
+            this.UpdateAttackable(false);
             this._gameState.ResetCardColors();
         }
 
         public override State NextState()
         {
             return this._nextState;
+        }
+
+        private void UpdateAttackable(bool newValue)
+        {
+            Owner currentPlayer = Owner.ENEMY;
+            if (this._gameState.turnState.Id() == "PlayerTurnState")
+            {
+                currentPlayer = Owner.PLAYER;
+            }
+            foreach (Transform card in this._battlefield.cards)
+            {
+                UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                if (unitController.ownedBy == currentPlayer)
+                {
+                    unitController.canAttack = newValue;
+                }
+            }
         }
 
         public override string Id()
