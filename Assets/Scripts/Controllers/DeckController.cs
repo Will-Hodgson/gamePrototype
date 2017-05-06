@@ -19,6 +19,7 @@ namespace Assets.Scripts
                 foreach (string str in cardList)
                 {
                     CardController card = factory.CreateCard(str).GetComponent<CardController>();
+                    card.GetComponent<UnitController>().Init(Owner.PLAYER);
                     Unit data = card.GetComponent<Unit>();
                     CanvasGroup canvasGroup = card.GetComponent<CanvasGroup>();
                     card.GetComponentInChildren<Text>().text = data.name + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();
@@ -34,6 +35,7 @@ namespace Assets.Scripts
                 foreach (string str in cardList)
                 {
                     CardController card = factory.CreateCard(str).GetComponent<CardController>();
+                    card.GetComponent<UnitController>().Init(Owner.ENEMY);
                     Unit data = card.GetComponent<Unit>();
                     CanvasGroup canvasGroup = card.GetComponent<CanvasGroup>();
                     card.GetComponentInChildren<Text>().text = data.name + "\nMana: " + data.manaCost.ToString()+ "\nAttack: " + data.attack.ToString() + "\nHealth: " + data.health.ToString();

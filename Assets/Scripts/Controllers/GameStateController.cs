@@ -107,16 +107,15 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._playerHandController.cards)
                 {
-                    CardController cont = card.GetComponent<CardController>();
-                    if (cont.canMove && card.GetComponent<CardData>().manaCost <= this._playerMana)
+                    if (card.GetComponent<Card>().manaCost <= this._playerMana)
                     {
-                        cont.ColorGreen();
+                        card.GetComponent<CardController>().ColorGreen();
                     }
                 }
                 foreach (Transform card in this._battlefield.cards)
                 {
                     CardController cont = card.GetComponent<CardController>();
-                    if (cont.ownedBy == Owner.PLAYER && cont.canMove)
+                    if (cont.ownedBy == Owner.PLAYER && card.GetComponent<UnitController>().canMove)
                     {
                         cont.ColorGreen();
                     }
@@ -126,16 +125,15 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._enemyHandController.cards)
                 {
-                    CardController cont = card.GetComponent<CardController>();
-                    if (cont.canMove && card.GetComponent<CardData>().manaCost <= this._enemyMana)
+                    if (card.GetComponent<Card>().manaCost <= this._enemyMana)
                     {
-                        cont.ColorGreen();
+                        card.GetComponent<CardController>().ColorGreen();
                     }
                 }
                 foreach (Transform card in this._battlefield.cards)
                 {
                     CardController cont = card.GetComponent<CardController>();
-                    if (cont.ownedBy == Owner.ENEMY && cont.canMove)
+                    if (cont.ownedBy == Owner.ENEMY && card.GetComponent<UnitController>().canMove)
                     {
                         cont.ColorGreen();
                     }
@@ -149,10 +147,11 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cont = card.GetComponent<CardController>();
-                    if (cont.ownedBy == Owner.PLAYER && cont.canAttack && cont.SquaresInAttackDistance().Count > 0)
+                    CardController cardController = card.GetComponent<CardController>();
+                    UnitController unitController = card.GetComponent<UnitController>();
+                    if (cardController.ownedBy == Owner.PLAYER && unitController.canAttack && unitController.SquaresInAttackDistance().Count > 0)
                     {
-                        cont.ColorGreen();
+                        cardController.ColorGreen();
                     }
                 }
             }
@@ -160,10 +159,11 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cont = card.GetComponent<CardController>();
-                    if (cont.ownedBy == Owner.ENEMY && cont.canAttack && cont.SquaresInAttackDistance().Count > 0)
+                    CardController cardController = card.GetComponent<CardController>();
+                    UnitController unitController = card.GetComponent<UnitController>();
+                    if (cardController.ownedBy == Owner.ENEMY && unitController.canAttack && unitController.SquaresInAttackDistance().Count > 0)
                     {
-                        cont.ColorGreen();
+                        cardController.ColorGreen();
                     }
                 }
             }

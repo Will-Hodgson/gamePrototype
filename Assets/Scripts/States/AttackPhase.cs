@@ -29,10 +29,10 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.PLAYER)
+                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                    if (unitController.ownedBy == Owner.PLAYER)
                     {
-                        cardController.canAttack = true;
+                        unitController.canAttack = true;
                     }
                 }
             }
@@ -40,10 +40,10 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.ENEMY)
+                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                    if (unitController.ownedBy == Owner.ENEMY)
                     {
-                        cardController.canAttack = true;
+                        unitController.canAttack = true;
                     }
                 }
             }
@@ -56,10 +56,10 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.PLAYER)
+                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                    if (unitController.ownedBy == Owner.PLAYER)
                     {
-                        cardController.canAttack = false;
+                        unitController.canAttack = false;
                     }
                 }
             }
@@ -67,10 +67,10 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.ENEMY)
+                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                    if (unitController.ownedBy == Owner.ENEMY)
                     {
-                        cardController.canAttack = false;
+                        unitController.canAttack = false;
                     }
                 }
             }

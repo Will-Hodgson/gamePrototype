@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace Assets.Scripts
 {
@@ -16,8 +17,14 @@ namespace Assets.Scripts
         public int maxDiagonalAttackDistance { get; set; }
         public int maxMoveDistance { get; set; }
         public int maxDiagonalMoveDistance { get; set; }
+        private List<Ability> _abilities;
 
-        public void Init(string nm, int mc, int hl, int at, int ad, int dad, int md, int dmd)
+        public List<Ability> abilities
+        {
+            get { return this._abilities; }
+        }
+
+        public void Init(string nm, int mc, int hl, int at, int ad, int dad, int md, int dmd, List<Ability> abilities)
         {
             name = nm;
             manaCost = mc;
@@ -33,6 +40,22 @@ namespace Assets.Scripts
             maxDiagonalAttackDistance = diagonalAttackDistance;
             maxMoveDistance = moveDistance;
             maxDiagonalMoveDistance = diagonalMoveDistance;
+            this._abilities = abilities;
+        }
+
+        public bool HasAbility(Ability ability)
+        {
+            return this._abilities.Contains(ability);
+        }
+
+        public void AddAbility(Ability ability)
+        {
+            this._abilities.Add(ability);
+        }
+            
+        public void RemoveAbility(Ability ability)
+        {
+            this._abilities.Remove(ability);
         }
 
         public void Reset()
@@ -43,6 +66,6 @@ namespace Assets.Scripts
             this.diagonalAttackDistance = this.maxDiagonalAttackDistance;
             this.moveDistance = this.maxMoveDistance;
             this.diagonalMoveDistance = this.maxDiagonalMoveDistance;
-                 }
+        }
     }
 }

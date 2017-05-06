@@ -8,6 +8,7 @@ namespace Assets.Scripts
     public class CardMouseController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
         private CardController _cardController;
+        private UnitController _unitController;
         private Battlefield _battlefield;
         private GameStateController _gameState;
         private Transform _cardPreviewPanel;
@@ -15,6 +16,7 @@ namespace Assets.Scripts
         void Awake()
         {
             this._cardController = this.GetComponent<CardController>();
+            this._unitController = this.GetComponent<UnitController>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
             this._cardPreviewPanel = GameObject.Find("CardPreviewPanel").transform;
@@ -66,10 +68,10 @@ namespace Assets.Scripts
                 if (this._gameState.selectedCard != null)
                 {
                     // This card is being attacked
-                    if (this._gameState.selectedCard.GetComponent<CardController>().SquaresInAttackDistance().Contains(this._cardController.square))
+                    if (this._gameState.selectedCard.GetComponent<UnitController>().SquaresInAttackDistance().Contains(this._unitController.square))
                     {
-                        this._cardController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
-                        this._gameState.selectedCard.GetComponent<CardController>().canAttack = false;
+                        this._unitController.TakeDamage(this._gameState.selectedCard.GetComponent<CardData>().attack);
+                        this._gameState.selectedCard.GetComponent<UnitController>().canAttack = false;
                         this._gameState.selectedCard = null;
                         this._gameState.ResetCardColors();
                         this._gameState.ColorAttackableCards();
@@ -85,9 +87,10 @@ namespace Assets.Scripts
 
         public void SelectAndColorMoveSquares()
         {
-            if (this._cardController.canMove && (this._cardController.boardLocation == Location.BATTLEFIELD ||
-                (this._cardController.ownedBy == Owner.PLAYER && this._cardController.GetComponent<CardData>().manaCost <= this._gameState.playerMana) ||
-                (this._cardController.ownedBy == Owner.ENEMY && this._cardController.GetComponent<CardData>().manaCost <= this._gameState.enemyMana)))
+            if (this._unitController.canMove && this._cardController.boardLocation == Location.BATTLEFIELD ||
+                this._cardController.boardLocation == Location.HAND && (
+                (this._cardController.ownedBy == Owner.PLAYER && this._cardController.GetComponent<Card>().manaCost <= this._gameState.playerMana) ||
+                (this._cardController.ownedBy == Owner.ENEMY && this._cardController.GetComponent<Card>().manaCost <= this._gameState.enemyMana)))
             {
                 this._gameState.selectedCard = this.transform;
                 // Card selected - show available moves
@@ -95,7 +98,7 @@ namespace Assets.Scripts
                 this._gameState.ResetCardColors();
                 this._gameState.ColorPlayableAndMovableCards();
                 this._cardController.ColorBlue();
-                var moveSquares = this.GetComponent<CardController>().SquaresInMoveDistance();
+                var moveSquares = this._unitController.SquaresInMoveDistance();
                 foreach (var square in moveSquares)
                 {
                     square.GetComponent<SquareController>().ColorGray();
@@ -105,9 +108,9 @@ namespace Assets.Scripts
 
         public void SelectAndColorAttackSquares()
         {
-            if (this._cardController.canAttack)
+            if (this._unitController.canAttack)
             {
-                var attackSquares = this.GetComponent<CardController>().SquaresInAttackDistance();
+                var attackSquares = this._unitController.SquaresInAttackDistance();
                 if (attackSquares.Count == 0)
                 {
                     return;

@@ -20,12 +20,13 @@ namespace Assets.Scripts
         {
             if (this._gameState.selectedCard != null && this._gameState.phaseState.Id() != "AttackPhase")
             {
-                var cardController = this._gameState.selectedCard.GetComponent<CardController>();
+                CardController cardController = this._gameState.selectedCard.GetComponent<CardController>();
+                UnitController unitController = cardController.GetComponent<UnitController>();
                 if (cardController.boardLocation == Location.HAND)
                 {
                     this._battlefield.AddCard(this._gameState.selectedCard);
                 }
-                var moveSquares = cardController.SquaresInMoveDistance();
+                var moveSquares = unitController.SquaresInMoveDistance();
 
                 if (this.GetComponent<SquareController>().card == null)
                 {
@@ -33,19 +34,26 @@ namespace Assets.Scripts
                     if (moveSquares.Contains(this.transform))
                     {
                         if (cardController.ownedBy == Owner.PLAYER && cardController.boardLocation == Location.HAND && 
-                            cardController.GetComponent<CardData>().manaCost <= this._gameState.playerMana)
+                            cardController.GetComponent<Card>().manaCost <= this._gameState.playerMana)
                         {
-                            this._gameState.playerMana = this._gameState.playerMana - cardController.GetComponent<CardData>().manaCost;
+                            this._gameState.playerMana = this._gameState.playerMana - cardController.GetComponent<Card>().manaCost;
                         }
                         else if (cardController.ownedBy == Owner.ENEMY && cardController.boardLocation == Location.HAND &&
-                            cardController.GetComponent<CardData>().manaCost <= this._gameState.enemyMana)
+                            cardController.GetComponent<Card>().manaCost <= this._gameState.enemyMana)
                         {
-                            this._gameState.enemyMana = this._gameState.enemyMana - cardController.GetComponent<CardData>().manaCost;
+                            this._gameState.enemyMana = this._gameState.enemyMana - cardController.GetComponent<Card>().manaCost;
                         }
 
-                        cardController.MoveCard(this.transform);
-                        cardController.transform.SetParent(this.transform);
-                        cardController.canMove = false;
+                        if (cardController.boardLocation == Location.HAND)
+                        {
+                            unitController.PlayCard(this.transform);
+                        }
+                        else
+                        {
+                            unitController.MoveCard(this.transform);
+                            unitController.canMove = false;
+                        }
+                        unitController.transform.SetParent(this.transform);
                     }
                 }
 

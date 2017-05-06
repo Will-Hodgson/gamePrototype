@@ -27,7 +27,7 @@ namespace Assets.Scripts
             this._phasePanelText.text = "MainPhase1";
             foreach (Transform card in this._battlefield.cards)
             {
-                card.GetComponent<CardController>().ResetStats();
+                card.GetComponent<UnitController>().ResetStats();
             }
         }
 
@@ -37,32 +37,22 @@ namespace Assets.Scripts
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.PLAYER)
+                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                    if (unitController.ownedBy == Owner.PLAYER)
                     {
-                        cardController.canMove = true;
+                        unitController.canMove = true;
                     }
-                }
-                foreach (Transform card in this._playerHandController.cards)
-                {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    cardController.canMove = true;
                 }
             }
             else
             {
                 foreach (Transform card in this._battlefield.cards)
                 {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.ENEMY)
+                    UnitController unitController = card.gameObject.GetComponent<UnitController>();
+                    if (unitController.ownedBy == Owner.ENEMY)
                     {
-                        cardController.canMove = true;
+                        unitController.canMove = true;
                     }
-                }
-                foreach (Transform card in this._enemyHandController.cards)
-                {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    cardController.canMove = true;
                 }
             }
             this._gameState.ColorPlayableAndMovableCards();

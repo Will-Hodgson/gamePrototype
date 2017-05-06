@@ -34,37 +34,9 @@ namespace Assets.Scripts
 
         public override void Exit()
         {
-            if (this._gameState.turnState.Id() == "PlayerTurnState")
+            foreach (Transform card in this._battlefield.cards)
             {
-                foreach (Transform card in this._battlefield.cards)
-                {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.PLAYER)
-                    {
-                        cardController.canMove = false;
-                    }
-                }
-                foreach (Transform card in this._playerHandController.cards)
-                {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    cardController.canMove = false;
-                }
-            }
-            else
-            {
-                foreach (Transform card in this._battlefield.cards)
-                {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    if (cardController.ownedBy == Owner.ENEMY)
-                    {
-                        cardController.canMove = false;
-                    }
-                }
-                foreach (Transform card in this._enemyHandController.cards)
-                {
-                    CardController cardController = card.gameObject.GetComponent<CardController>();
-                    cardController.canMove = false;
-                }
+                card.gameObject.GetComponent<UnitController>().canMove = false;
             }
             this._gameState.ResetCardColors();
         }
