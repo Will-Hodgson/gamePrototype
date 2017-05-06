@@ -58,8 +58,10 @@ namespace Assets.Scripts
                 this._handController.RemoveCard(this.transform);
             }
             this.square.GetComponent<SquareController>().RemoveUnit();
+            this._battlefield.DeleteCard(this.transform);
             this.square = null;
             this._graveyardController.AddCard(this.transform);
+            this._cardController.boardLocation = Location.GRAVEYARD;
         }
 
         public void PlayCard(Transform square)

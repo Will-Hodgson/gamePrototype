@@ -12,7 +12,7 @@ namespace Assets.Scripts
         public Transform CreateCard(string cardName)
         {
             GameObject cardPrefab = Resources.Load("Prefabs/Card", typeof(GameObject)) as GameObject;
-            Transform card = GameObject.Instantiate(cardPrefab.transform);
+            Transform card = GameObject.Instantiate(cardPrefab).transform;
 
             XmlDocument doc = new XmlDocument();
             doc.Load(Application.dataPath + "/Resources/Cards/" + cardName + ".xml");
