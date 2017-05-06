@@ -49,7 +49,7 @@ namespace Assets.Scripts
                 this._gameState.selectedCard = null;
             }
             else if ((this._gameState.turnState.Id() == "PlayerTurnState" && this._cardController.ownedBy == Owner.PLAYER) ||
-                (this._gameState.turnState.Id() == "EnemyTurnState" && this._cardController.ownedBy == Owner.ENEMY))
+                     (this._gameState.turnState.Id() == "EnemyTurnState" && this._cardController.ownedBy == Owner.ENEMY))
             {
                 if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
                 {
@@ -62,20 +62,18 @@ namespace Assets.Scripts
                     SelectAndColorAttackSquares();
                 }
             }
-            else
+            // Clicked on opposing player's card during attack phase
+            else if (this._gameState.selectedCard != null)
             {
-                // Clicked on opposing player's card during attack phase
-                if (this._gameState.selectedCard != null)
+                // This card is being attacked
+                if (this._gameState.selectedCard.GetComponent<UnitController>().SquaresInAttackDistance().Contains(this._unitController.square))
                 {
-                    // This card is being attacked
-                    if (this._gameState.selectedCard.GetComponent<UnitController>().SquaresInAttackDistance().Contains(this._unitController.square))
-                    {
-                        this._unitController.TakeDamage(this._gameState.selectedCard.GetComponent<Unit>().attack);
-                        this._gameState.selectedCard.GetComponent<UnitController>().canAttack = false;
-                        this._gameState.selectedCard = null;
-                        this._gameState.ResetCardColors();
-                        this._gameState.ColorAttackableCards();
-                    }
+                    this._unitController.TakeDamage(this._gameState.selectedCard.GetComponent<Unit>().attack);
+                    this._gameState.selectedCard.GetComponent<UnitController>().TakeDamage(this.GetComponent<Unit>().attack);
+                    this._gameState.selectedCard.GetComponent<UnitController>().canAttack = false;
+                    this._gameState.selectedCard = null;
+                    this._gameState.ResetCardColors();
+                    this._gameState.ColorAttackableCards();
                 }
             }
         }

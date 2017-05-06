@@ -28,6 +28,7 @@ namespace Assets.Scripts
         private GraveyardController _graveyardController;
         public Location boardLocation { get; set; }
         public Owner ownedBy { get; private set; }
+        private Text cardText { get; set; }
 
         void Awake()
         {
@@ -35,6 +36,7 @@ namespace Assets.Scripts
             this._handController = null;
             this._graveyardController = null;
             this.boardLocation = Location.DECK;
+            this.cardText = this.GetComponentInChildren<Text>();
         }
 
         public void Init(Owner owner)
@@ -80,6 +82,11 @@ namespace Assets.Scripts
             {
                 return;
             }
+        }
+
+        public void UpdateText(string txt)
+        {
+            this.cardText.text = txt;
         }
 
         public void ColorRed()

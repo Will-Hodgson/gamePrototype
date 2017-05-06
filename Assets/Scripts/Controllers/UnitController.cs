@@ -62,6 +62,8 @@ namespace Assets.Scripts
             this.square = null;
             this._graveyardController.AddCard(this.transform);
             this._cardController.boardLocation = Location.GRAVEYARD;
+            this.canMove = false;
+            this.canAttack = false;
         }
 
         public void PlayCard(Transform square)
@@ -121,6 +123,11 @@ namespace Assets.Scripts
             {
                 // Card has been killed
                 this.DiscardCard();
+            }
+            else 
+            {
+                this._cardController.UpdateText(this._unit.name + "\nMana: " + this._unit.manaCost.ToString() +
+                    "\nAttack: " + this._unit.attack.ToString() + "\nHealth: " + this._unit.health.ToString());
             }
         }
 
