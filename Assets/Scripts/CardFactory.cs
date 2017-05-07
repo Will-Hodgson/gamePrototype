@@ -16,7 +16,6 @@ namespace Assets.Scripts
 
             XmlDocument doc = new XmlDocument();
             doc.Load(Application.dataPath + "/Resources/Cards/" + cardName + ".xml");
-            XmlNode node = doc.DocumentElement.SelectSingleNode("/card");
 
             string name = doc.DocumentElement.SelectSingleNode("/card/name").InnerText;
             int manaCost = int.Parse(doc.DocumentElement.SelectSingleNode("/card/manaCost").InnerText);
@@ -37,7 +36,7 @@ namespace Assets.Scripts
                 }
                 Unit unit = card.gameObject.AddComponent<Unit>();
                 unit.Init(name, manaCost, health, attack, attackDistance, diagonalAttackDistance, moveDistance, diagonalMoveDistance, abilities);
-                UnitController unitController = card.gameObject.AddComponent<UnitController>();
+                card.gameObject.AddComponent<UnitController>();
                 return card;
             }
             else

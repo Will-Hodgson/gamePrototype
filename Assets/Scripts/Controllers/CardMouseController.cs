@@ -87,8 +87,8 @@ namespace Assets.Scripts
         {
             if (this._unitController.canMove && this._cardController.boardLocation == Location.BATTLEFIELD ||
                 this._cardController.boardLocation == Location.HAND && (
-                (this._cardController.ownedBy == Owner.PLAYER && this._cardController.GetComponent<Card>().manaCost <= this._gameState.playerMana) ||
-                (this._cardController.ownedBy == Owner.ENEMY && this._cardController.GetComponent<Card>().manaCost <= this._gameState.enemyMana)))
+                (this._cardController.ownedBy == Owner.PLAYER && this._cardController.GetComponent<Card>().manaCost <= this._gameState.playerPlayerController.mana) ||
+                (this._cardController.ownedBy == Owner.ENEMY && this._cardController.GetComponent<Card>().manaCost <= this._gameState.enemyPlayerController.mana)))
             {
                 this._gameState.selectedCard = this.transform;
                 // Card selected - show available moves

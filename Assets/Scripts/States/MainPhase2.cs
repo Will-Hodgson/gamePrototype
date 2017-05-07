@@ -8,8 +8,6 @@ namespace Assets.Scripts
         private State _nextState;
         private GameStateController _gameState;
         private Battlefield _battlefield;
-        private HandController _playerHandController;
-        private HandController _enemyHandController;
         private Text _phasePanelText;
 
         void Awake()
@@ -17,8 +15,6 @@ namespace Assets.Scripts
             this._nextState = GameObject.Find("Camera").GetComponent<MainPhase1>();
             this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
             this._battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
-            this._playerHandController = GameObject.Find("PlayerHand").GetComponent<HandController>();
-            this._enemyHandController = GameObject.Find("EnemyHand").GetComponent<HandController>();
             this._phasePanelText = GameObject.Find("PhasePanel/Text").GetComponent<Text>();
         }
 

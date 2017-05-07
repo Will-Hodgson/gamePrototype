@@ -34,14 +34,14 @@ namespace Assets.Scripts
                     if (moveSquares.Contains(this.transform))
                     {
                         if (cardController.ownedBy == Owner.PLAYER && cardController.boardLocation == Location.HAND && 
-                            cardController.GetComponent<Card>().manaCost <= this._gameState.playerMana)
+                            cardController.GetComponent<Card>().manaCost <= this._gameState.playerPlayerController.mana)
                         {
-                            this._gameState.playerMana = this._gameState.playerMana - cardController.GetComponent<Card>().manaCost;
+                            this._gameState.playerPlayerController.mana -= cardController.GetComponent<Card>().manaCost;
                         }
                         else if (cardController.ownedBy == Owner.ENEMY && cardController.boardLocation == Location.HAND &&
-                            cardController.GetComponent<Card>().manaCost <= this._gameState.enemyMana)
+                            cardController.GetComponent<Card>().manaCost <= this._gameState.enemyPlayerController.mana)
                         {
-                            this._gameState.enemyMana = this._gameState.enemyMana - cardController.GetComponent<Card>().manaCost;
+                            this._gameState.enemyPlayerController.mana -= cardController.GetComponent<Card>().manaCost;
                         }
 
                         if (cardController.boardLocation == Location.HAND)

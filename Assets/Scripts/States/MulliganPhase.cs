@@ -115,19 +115,21 @@ namespace Assets.Scripts
         {
             Transform mulliganButton = this._enemyMulliganButton;
             Transform keepCardsButton = this._enemyKeepCardsButton;
-            bool buttonClicked = this._enemyButtonClicked;
             bool otherButtonClicked = this._playerButtonClicked;
             if (player == "Player")
             {
                 mulliganButton = this._playerMulliganButton;
                 keepCardsButton = this._playerKeepCardsButton;
-                buttonClicked = this._playerButtonClicked;
                 otherButtonClicked = this._enemyButtonClicked;
+                this._playerButtonClicked = true;
+            }
+            else
+            {
+                this._enemyButtonClicked = true;
             }
             mulliganButton.gameObject.SetActive(false);
             keepCardsButton.gameObject.SetActive(false);
 
-            buttonClicked = true;
             if (otherButtonClicked)
             {
                 this._gameState.ChangeState();

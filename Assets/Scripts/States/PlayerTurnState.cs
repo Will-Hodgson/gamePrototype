@@ -6,7 +6,7 @@ namespace Assets.Scripts
     public class PlayerTurnState : State
     {
         private State _nextState;
-        private GameStateController _gameState;
+        private PlayerController _playerController;
         private HandController _handController;
         private DeckController _deckController;
         private Text _turnPanelText;
@@ -14,7 +14,7 @@ namespace Assets.Scripts
         void Awake()
         {
             this._nextState = GameObject.Find("Camera").GetComponent<EnemyTurnState>();
-            this._gameState = GameObject.Find("Camera").GetComponent<GameStateController>();
+            this._playerController = GameObject.Find("PlayerHand").GetComponent<PlayerController>();
             this._handController = GameObject.Find("PlayerHand").GetComponent<HandController>();
             this._deckController = GameObject.Find("PlayerDeckPanel/PlayerDeck").GetComponent<DeckController>();
             this._turnPanelText = GameObject.Find("TurnPanel/Text").GetComponent<Text>();
@@ -23,8 +23,8 @@ namespace Assets.Scripts
         public override void Enter()
         {
             this._turnPanelText.text = "PlayerTurn";
-            this._gameState.playerManaMax += 1;
-            this._gameState.playerMana = this._gameState.playerManaMax;
+            this._playerController.maxMana += 1;
+            this._playerController.mana = this._playerController.maxMana;
             this._handController.AddCard(this._deckController.DrawCard());
         }
 
