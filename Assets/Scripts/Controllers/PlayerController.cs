@@ -55,6 +55,16 @@ namespace Assets.Scripts
             this.deckController.Init(Enumerable.Repeat("TestUnit", 30).ToList());
         }
 
+        public void TakeDamage(int damage)
+        {
+            this.health -= damage;
+        }
+
+        public bool IsDead()
+        {
+            return this.health <= 0;
+        }
+
         private void UpdateHealthText()
         {
             this._healthText.text = "Health: " + this._health.ToString();
