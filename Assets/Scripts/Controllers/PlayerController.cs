@@ -39,16 +39,18 @@ namespace Assets.Scripts
             string str1 = "EnemyHealth";
             string str2 = "EnemyMana";
             string str3 = "EnemyHand";
+            string str4 = "EnemyDeckPanel/EnemyDeck";
             if (player == "Player")
             {
                 str1 = "PlayerHealth";
                 str2 = "PlayerMana";
                 str3 = "PlayerHand";
+                str4 = "PlayerDeckPanel/PlayerDeck";
             }
             this._healthText = GameObject.Find(str1).GetComponent<Text>();
             this._manaText = GameObject.Find(str2).GetComponent<Text>();
             this.handController = GameObject.Find(str3).GetComponent<HandController>();
-            this.deckController = GameObject.Find(str3).GetComponent<DeckController>();
+            this.deckController = GameObject.Find(str4).GetComponent<DeckController>();
             this._health = 25;
             this._mana = this._maxMana = 0;
 

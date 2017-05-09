@@ -2865,6 +2865,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d951fc44137d214d93187a772aade39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battlefield: {fileID: 0}
+  playerPlayerController: {fileID: 0}
+  enemyPlayerController: {fileID: 0}
 --- !u!1 &1556200103 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 124444, guid: fcc06f6d204df9146b6260f13bc7944c, type: 2}

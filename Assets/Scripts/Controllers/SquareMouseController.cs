@@ -51,7 +51,6 @@ namespace Assets.Scripts
                         else
                         {
                             unitController.MoveCard(this.transform);
-                            unitController.canMove = false;
                         }
                         unitController.transform.SetParent(this.transform);
                     }

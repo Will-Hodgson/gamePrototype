@@ -68,9 +68,7 @@ namespace Assets.Scripts
                 // This card is being attacked
                 if (this._gameState.selectedCard.GetComponent<UnitController>().SquaresInAttackDistance().Contains(this._unitController.square))
                 {
-                    this._unitController.TakeDamage(this._gameState.selectedCard.GetComponent<Unit>().attack);
-                    this._gameState.selectedCard.GetComponent<UnitController>().TakeDamage(this.GetComponent<Unit>().attack);
-                    this._gameState.selectedCard.GetComponent<UnitController>().canAttack = false;
+                    this._gameState.selectedCard.GetComponent<UnitController>().Attack(this._unitController);
                     this._gameState.selectedCard = null;
                     this._gameState.ResetCardColors();
                     this._gameState.ColorAttackableCards();

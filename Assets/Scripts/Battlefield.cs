@@ -67,13 +67,43 @@ namespace Assets.Scripts
 
         public Transform[] GetSquares()
         {
-            var squares = new Transform[this._width * this._height];
+            Transform[] squares = new Transform[this._width * this._height];
             for (int y = 0; y < this._height; y++)
             {
                 for (int x = 0; x < this._width; x++)
                 {
                     squares[(y * this._width) + x] = this._battlefield[x, y];
                 }
+            }
+            return squares;
+        }
+
+        public Transform[] GetSquareRow(int rowNum)
+        {
+            if (rowNum < 0 || rowNum >= this._height)
+            {
+                Debug.LogWarning("Row number is out of range");
+                return null;
+            }
+            Transform[] squares = new Transform[this._height];
+            for (int i = 0; i < this._height; i++)
+            {
+                squares[i] = this._battlefield[i, rowNum];
+            }
+            return squares;
+        }
+
+        public Transform[] GetSquareCol(int colNum)
+        {
+            if (colNum < 0 || colNum >= this._width)
+            {
+                Debug.LogWarning("Row number is out of range");
+                return null;
+            }
+            Transform[] squares = new Transform[this._width];
+            for (int i = 0; i < this._width; i++)
+            {
+                squares[i] = this._battlefield[colNum, i];
             }
             return squares;
         }

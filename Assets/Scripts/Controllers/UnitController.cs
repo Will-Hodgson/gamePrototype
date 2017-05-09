@@ -16,6 +16,13 @@ namespace Assets.Scripts
         public Transform square { get; set; }
         public bool canMove { get; set; }
         public bool canAttack { get; set; }
+        public bool isExhausted { get; set; }
+
+        public Unit unit
+        {
+            get { return this._unit; }
+            set { this._unit = value; }
+        }
 
         void Awake()
         {
@@ -41,6 +48,7 @@ namespace Assets.Scripts
                 this._handController = GameObject.Find("EnemyHand").GetComponent<HandController>();
                 this._graveyardController = GameObject.Find("EnemyGraveyardPanel/EnemyGraveyard").GetComponent<GraveyardController>();
             }
+            this.canMove = this.canAttack = this.isExhausted = false;
         }
 
         public void DiscardCard()
@@ -62,8 +70,7 @@ namespace Assets.Scripts
             this.square = null;
             this._graveyardController.AddCard(this.transform);
             this._cardController.boardLocation = Location.GRAVEYARD;
-            this.canMove = false;
-            this.canAttack = false;
+            this.canMove = this.canAttack = this.isExhausted = false;
         }
 
         public void PlayCard(Transform square)
@@ -112,10 +119,21 @@ namespace Assets.Scripts
             }
             this.square = square;
             this.square.gameObject.GetComponent<SquareController>().SetNewUnit(this); // new square
+            this.canMove = false;
             this._cardController.ResetColor();
             this._gameState.ColorPlayableAndMovableCards();
         }
 
+        public void Attack(UnitController defender)
+        {
+            defender.TakeDamage(this._unit.attack);
+            if (!defender.isExhausted)
+            {
+                this.TakeDamage(defender.unit.attack);
+            }
+            this.canAttack = false;
+            this.isExhausted = true;
+        }
         public void TakeDamage(int damage)
         {
             this._unit.health -= damage;

@@ -56,68 +56,57 @@ namespace Assets.Scripts
 
         public void ColorPlayableAndMovableCards()
         {
+            PlayerController playerController = this.enemyPlayerController;
+            int rowNum = 0;
+            Owner owner = Owner.ENEMY;
             if (this.turnState.Id() == "PlayerTurnState")
             {
-                foreach (Transform card in this.playerPlayerController.handController.cards)
+                playerController = this.playerPlayerController;
+                rowNum = this.battlefield.height - 1;
+                owner = Owner.PLAYER;
+            }
+
+            foreach (Transform square in this.battlefield.GetSquareRow(rowNum))
+            {
+                // Make sure there is a free square to play a card
+                if (square.GetComponent<SquareController>().card == null)
                 {
-                    if (card.GetComponent<Card>().manaCost <= this.playerPlayerController.mana)
+                    foreach (Transform card in playerController.handController.cards)
                     {
-                        card.GetComponent<CardController>().ColorGreen();
+                        if (card.GetComponent<Card>().manaCost <= playerController.mana)
+                        {
+                            card.GetComponent<CardController>().ColorGreen();
+                        }
                     }
-                }
-                foreach (Transform card in this.battlefield.cards)
-                {
-                    CardController cont = card.GetComponent<CardController>();
-                    if (cont.ownedBy == Owner.PLAYER && card.GetComponent<UnitController>().canMove)
-                    {
-                        cont.ColorGreen();
-                    }
+                    break;
                 }
             }
-            else
+            foreach (Transform card in this.battlefield.cards)
             {
-                foreach (Transform card in this.enemyPlayerController.handController.cards)
+                CardController cardController = card.GetComponent<CardController>();
+                UnitController unitController = card.GetComponent<UnitController>();
+                if (cardController.ownedBy == owner && unitController.canMove && !unitController.isExhausted)
                 {
-                    if (card.GetComponent<Card>().manaCost <= this.enemyPlayerController.mana)
-                    {
-                        card.GetComponent<CardController>().ColorGreen();
-                    }
-                }
-                foreach (Transform card in this.battlefield.cards)
-                {
-                    CardController cont = card.GetComponent<CardController>();
-                    if (cont.ownedBy == Owner.ENEMY && card.GetComponent<UnitController>().canMove)
-                    {
-                        cont.ColorGreen();
-                    }
+                    cardController.ColorGreen();
                 }
             }
         }
 
         public void ColorAttackableCards()
         {
+            Owner owner = Owner.ENEMY;
             if (this.turnState.Id() == "PlayerTurnState")
             {
-                foreach (Transform card in this.battlefield.cards)
-                {
-                    CardController cardController = card.GetComponent<CardController>();
-                    UnitController unitController = card.GetComponent<UnitController>();
-                    if (cardController.ownedBy == Owner.PLAYER && unitController.canAttack && unitController.SquaresInAttackDistance().Count > 0)
-                    {
-                        cardController.ColorGreen();
-                    }
-                }
+                owner = Owner.PLAYER;
             }
-            else
+            foreach (Transform card in this.battlefield.cards)
             {
-                foreach (Transform card in this.battlefield.cards)
+                CardController cardController = card.GetComponent<CardController>();
+                UnitController unitController = card.GetComponent<UnitController>();
+                if (cardController.ownedBy == owner && unitController.canAttack &&
+                    !unitController.isExhausted && unitController.SquaresInAttackDistance().Count > 0)
                 {
-                    CardController cardController = card.GetComponent<CardController>();
-                    UnitController unitController = card.GetComponent<UnitController>();
-                    if (cardController.ownedBy == Owner.ENEMY && unitController.canAttack && unitController.SquaresInAttackDistance().Count > 0)
-                    {
-                        cardController.ColorGreen();
-                    }
+                    cardController.ColorGreen();
                 }
             }
         }

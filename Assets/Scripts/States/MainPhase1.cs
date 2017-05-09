@@ -37,6 +37,7 @@ namespace Assets.Scripts
                     if (unitController.ownedBy == Owner.PLAYER)
                     {
                         unitController.canMove = true;
+                        unitController.isExhausted = false;
                     }
                 }
             }
@@ -48,6 +49,7 @@ namespace Assets.Scripts
                     if (unitController.ownedBy == Owner.ENEMY)
                     {
                         unitController.canMove = true;
+                        unitController.isExhausted = false;
                     }
                 }
             }
