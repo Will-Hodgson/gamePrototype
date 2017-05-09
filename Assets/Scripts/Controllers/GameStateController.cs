@@ -65,27 +65,23 @@ namespace Assets.Scripts
                 rowNum = this.battlefield.height - 1;
                 owner = Owner.PLAYER;
             }
-
-            foreach (Transform square in this.battlefield.GetSquareRow(rowNum))
+            foreach (Transform card in playerController.handController.cards)
             {
-                // Make sure there is a free square to play a card
-                if (square.GetComponent<SquareController>().card == null)
+                if (card.GetComponent<Card>().manaCost <= playerController.mana)
                 {
-                    foreach (Transform card in playerController.handController.cards)
+                    UnitController unitController = card.GetComponent<UnitController>();
+                    if (unitController == null || unitController.SquaresInMoveDistance().Count > 0)
                     {
-                        if (card.GetComponent<Card>().manaCost <= playerController.mana)
-                        {
-                            card.GetComponent<CardController>().ColorGreen();
-                        }
+                        card.GetComponent<CardController>().ColorGreen();
                     }
-                    break;
                 }
             }
             foreach (Transform card in this.battlefield.cards)
             {
                 CardController cardController = card.GetComponent<CardController>();
                 UnitController unitController = card.GetComponent<UnitController>();
-                if (cardController.ownedBy == owner && unitController.canMove && !unitController.isExhausted)
+                if (cardController.ownedBy == owner && unitController.canMove &&
+                    !unitController.isExhausted && unitController.SquaresInMoveDistance().Count > 0)
                 {
                     cardController.ColorGreen();
                 }
