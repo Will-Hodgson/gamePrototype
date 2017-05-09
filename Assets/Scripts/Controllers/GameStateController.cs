@@ -57,12 +57,10 @@ namespace Assets.Scripts
         public void ColorPlayableAndMovableCards()
         {
             PlayerController playerController = this.enemyPlayerController;
-            int rowNum = 0;
             Owner owner = Owner.ENEMY;
             if (this.turnState.Id() == "PlayerTurnState")
             {
                 playerController = this.playerPlayerController;
-                rowNum = this.battlefield.height - 1;
                 owner = Owner.PLAYER;
             }
             foreach (Transform card in playerController.handController.cards)
@@ -91,18 +89,23 @@ namespace Assets.Scripts
         public void ColorAttackableCards()
         {
             Owner owner = Owner.ENEMY;
+            int rowNum = this.battlefield.height - 1;
             if (this.turnState.Id() == "PlayerTurnState")
             {
                 owner = Owner.PLAYER;
+                rowNum = 0;
             }
             foreach (Transform card in this.battlefield.cards)
             {
                 CardController cardController = card.GetComponent<CardController>();
                 UnitController unitController = card.GetComponent<UnitController>();
-                if (cardController.ownedBy == owner && unitController.canAttack &&
-                    !unitController.isExhausted && unitController.SquaresInAttackDistance().Count > 0)
+                if (cardController.ownedBy == owner && unitController.canAttack && !unitController.isExhausted)
                 {
-                    cardController.ColorGreen();
+                    if (unitController.SquaresInAttackDistance().Count > 0 ||
+                        unitController.square.GetComponent<SquareController>().battlefieldLocation[1] == rowNum)
+                    {
+                        cardController.ColorGreen();
+                    }
                 }
             }
         }
