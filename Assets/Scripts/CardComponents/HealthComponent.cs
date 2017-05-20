@@ -1,20 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
     public class HealthComponent : MonoBehaviour {
 
-        private UnitController unitController;
-        private Transform healthTransform;
+        private UnitController _unitController;
+        private Text _text;
+
         public int health
         { 
             get { return health; }
             set
             {
                 health = value;
-                UpdateHealth();
+                this._text.text = this.health.ToString() + "/" + this.maxHealth.ToString();;
             }
         }
             
@@ -24,19 +26,17 @@ namespace Assets.Scripts
             set
             {
                 maxHealth = value;
-                UpdateHealth();
+                this._text.text = this.health.ToString() + "/" + this.maxHealth.ToString();
             }
         }
 
         public void Init(UnitController unitController)
         {
-            
+            this._unitController = unitController;
+            GameObject healthPrefab = Resources.Load("Prefabs/Health", typeof(GameObject)) as GameObject;
+            Transform healthTransform = GameObject.Instantiate(healthPrefab).transform;
+            this._text = healthTransform.GetComponent<Text>();
         }
-    	
-    	private void UpdateHealth() 
-        {
-    		
-    	}
 
         public bool IsDead()
         {
