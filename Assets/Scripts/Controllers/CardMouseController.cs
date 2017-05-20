@@ -55,8 +55,7 @@ namespace Assets.Scripts
                 }
                 this._gameState.selectedCard = null;
             }
-            else if ((this._gameState.turnState.Id() == "PlayerTurnState" && this._cardController.ownedBy == Owner.PLAYER) ||
-                     (this._gameState.turnState.Id() == "EnemyTurnState" && this._cardController.ownedBy == Owner.ENEMY))
+            else if (this.OwnedByCurrentPlayer())
             {
                 if (this._gameState.phaseState.Id() != "AttackPhase")
                 {
@@ -70,7 +69,7 @@ namespace Assets.Scripts
                 }
             }
             // Clicked on opposing player's card during attack phase
-            else if (this._gameState.selectedCard != null)
+            else if (this._gameState.selectedCard != null && this._gameState.phaseState.Id() == "AttackPhase")
             {
                 // This card is being attacked
                 if (this._gameState.selectedCard.GetComponent<UnitController>().SquaresInAttackDistance().Contains(this._unitController.square))
@@ -86,6 +85,12 @@ namespace Assets.Scripts
         public bool IsSelectedCard()
         {
             return this._gameState.selectedCard != null && this._gameState.selectedCard.gameObject.GetInstanceID() == this.gameObject.GetInstanceID();
+        }
+
+        public bool OwnedByCurrentPlayer()
+        {
+            return ((this._gameState.turnState.Id() == "PlayerTurnState" && this._cardController.ownedBy == Owner.PLAYER) ||
+                (this._gameState.turnState.Id() == "EnemyTurnState" && this._cardController.ownedBy == Owner.ENEMY));
         }
 
         public void SelectAndColorMoveSquares()
