@@ -119,19 +119,16 @@ namespace Assets.Scripts
         {
             if (player == "Player")
             {
-                Debug.Log("Setting attackable button");
                 this.attackPlayerButton.SetActive(true);
             }
             else
             {
-                Debug.Log("Setting attackable button");
                 this.attackEnemyButton.SetActive(true);
             }
         }
 
         public void ResetPlayerAttackableColor()
         {
-            Debug.Log("Clearing attackable button");
             this.attackEnemyButton.SetActive(false);
             this.attackPlayerButton.SetActive(false);
         }
@@ -156,6 +153,9 @@ namespace Assets.Scripts
         public void AttackPlayer()
         {
             this.selectedCard.GetComponent<UnitController>().AttackPlayer();
+            this.ResetPlayerAttackableColor();
+            this.ResetCardColors();
+            this.selectedCard = null;
         }
     }
 }
