@@ -45,13 +45,20 @@ namespace Assets.Scripts
             {
                 this._battlefield.ResetSquareBorders();
                 this._gameState.ResetCardColors();
-                this._gameState.ColorPlayableAndMovableCards();
+                if (this._gameState.phaseState.Id() != "AttackPhase")
+                {
+                    this._gameState.ColorPlayableAndMovableCards();
+                }
+                else
+                {
+                    this._gameState.ColorAttackableCards();
+                }
                 this._gameState.selectedCard = null;
             }
             else if ((this._gameState.turnState.Id() == "PlayerTurnState" && this._cardController.ownedBy == Owner.PLAYER) ||
                      (this._gameState.turnState.Id() == "EnemyTurnState" && this._cardController.ownedBy == Owner.ENEMY))
             {
-                if (this._gameState.phaseState.Id() == "MainPhase1" || this._gameState.phaseState.Id() == "MainPhase2")
+                if (this._gameState.phaseState.Id() != "AttackPhase")
                 {
                     // Clicked on player's card during player's main phase
                     SelectAndColorMoveSquares();
