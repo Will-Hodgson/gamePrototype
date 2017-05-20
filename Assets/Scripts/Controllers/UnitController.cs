@@ -134,6 +134,23 @@ namespace Assets.Scripts
             this.canAttack = false;
             this.isExhausted = true;
         }
+
+        public void AttackPlayer()
+        {
+            PlayerController player;
+            if (this.ownedBy == Owner.PLAYER)
+            {
+                player = this._gameState.enemyPlayerController;
+            }
+            else
+            {
+                player = this._gameState.playerPlayerController;
+            }
+            player.TakeDamage(this._unit.attack);
+            this.canAttack = false;
+            this.isExhausted = true;
+        }
+
         public void TakeDamage(int damage)
         {
             this._unit.health -= damage;

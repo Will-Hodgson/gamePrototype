@@ -107,10 +107,6 @@ namespace Assets.Scripts
             if (this._unitController.canAttack)
             {
                 var attackSquares = this._unitController.SquaresInAttackDistance();
-                if (attackSquares.Count == 0)
-                {
-                    return;
-                }
                 this._gameState.selectedCard = this.transform;
                 if (this._cardController.boardLocation != Location.BATTLEFIELD)
                     return;
@@ -121,6 +117,19 @@ namespace Assets.Scripts
                 foreach (var square in attackSquares)
                 {
                     square.GetComponent<SquareController>().card.ColorRed();
+                }
+
+                // Check if this card can attack the other player
+                string str = "Player";
+                int hgt = this._battlefield.height - 1;
+                if (this._unitController.ownedBy == Owner.PLAYER)
+                {
+                    str = "Enemy";
+                    hgt = 0;
+                }
+                if (this._unitController.square.GetComponent<SquareController>().battlefieldLocation[1] == hgt)
+                {
+                    this._gameState.ColorPlayerAttackable(str);
                 }
             }
         }

@@ -9,6 +9,8 @@ namespace Assets.Scripts
         public Battlefield battlefield;
         public PlayerController playerPlayerController;
         public PlayerController enemyPlayerController;
+        public GameObject attackPlayerButton;
+        public GameObject attackEnemyButton;
 
         public State turnState { get; set; }
         public State phaseState { get; set; }
@@ -21,6 +23,8 @@ namespace Assets.Scripts
             this.battlefield = GameObject.Find("Battlefield").GetComponent<Battlefield>();
             this.playerPlayerController = GameObject.Find("PlayerHand").GetComponent<PlayerController>();
             this.enemyPlayerController = GameObject.Find("EnemyHand").GetComponent<PlayerController>();
+            this.attackPlayerButton = GameObject.Find("AttackPlayerButton");
+            this.attackEnemyButton = GameObject.Find("AttackEnemyButton");
             this.selectedCard = null;
         }
 
@@ -78,8 +82,9 @@ namespace Assets.Scripts
             {
                 CardController cardController = card.GetComponent<CardController>();
                 UnitController unitController = card.GetComponent<UnitController>();
-                if (cardController.ownedBy == owner && unitController.canMove &&
-                    !unitController.isExhausted && unitController.SquaresInMoveDistance().Count > 0)
+                if ((cardController.ownedBy == owner && unitController.canMove &&   // Cards that can move; Cards owned by the player whose turn it is
+                    !unitController.isExhausted && unitController.SquaresInMoveDistance().Count > 0) && // Cards that are not exhausted; Free squares to move
+                    (unitController.unit.moveDistance > 0 || unitController.unit.diagonalMoveDistance > 0)) // Cards whose move distance is at least 1
                 {
                     cardController.ColorGreen();
                 }
@@ -102,12 +107,33 @@ namespace Assets.Scripts
                 if (cardController.ownedBy == owner && unitController.canAttack && !unitController.isExhausted)
                 {
                     if (unitController.SquaresInAttackDistance().Count > 0 ||
-                        unitController.square.GetComponent<SquareController>().battlefieldLocation[1] == rowNum)
+                        unitController.square.GetComponent<SquareController>().battlefieldLocation[1] == rowNum) // Can attack the other player
                     {
                         cardController.ColorGreen();
                     }
                 }
             }
+        }
+
+        public void ColorPlayerAttackable(string player)
+        {
+            if (player == "Player")
+            {
+                Debug.Log("Setting attackable button");
+                this.attackPlayerButton.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("Setting attackable button");
+                this.attackEnemyButton.SetActive(true);
+            }
+        }
+
+        public void ResetPlayerAttackableColor()
+        {
+            Debug.Log("Clearing attackable button");
+            this.attackEnemyButton.SetActive(false);
+            this.attackPlayerButton.SetActive(false);
         }
 
         public void ResetCardColors()
@@ -124,6 +150,12 @@ namespace Assets.Scripts
             {
                 card.GetComponent<CardController>().ResetColor();
             }
+            this.ResetPlayerAttackableColor();
+        }
+
+        public void AttackPlayer()
+        {
+            this.selectedCard.GetComponent<UnitController>().AttackPlayer();
         }
     }
 }
