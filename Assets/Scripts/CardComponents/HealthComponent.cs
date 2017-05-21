@@ -16,7 +16,11 @@ namespace Assets.Scripts
             set
             {
                 health = value;
-                this._text.text = this.health.ToString() + "/" + this.maxHealth.ToString();;
+                if (health > maxHealth)
+                {
+                    health = maxHealth;
+                }
+                _text.text = health.ToString();
             }
         }
             
@@ -26,16 +30,16 @@ namespace Assets.Scripts
             set
             {
                 maxHealth = value;
-                this._text.text = this.health.ToString() + "/" + this.maxHealth.ToString();
+                _text.text = health.ToString();
             }
         }
 
         public void Init(UnitController unitController)
         {
-            this._unitController = unitController;
+            _unitController = unitController;
             GameObject healthPrefab = Resources.Load("Prefabs/Health", typeof(GameObject)) as GameObject;
             Transform healthTransform = GameObject.Instantiate(healthPrefab).transform;
-            this._text = healthTransform.GetComponent<Text>();
+            _text = healthTransform.GetComponent<Text>();
         }
 
         public bool IsDead()

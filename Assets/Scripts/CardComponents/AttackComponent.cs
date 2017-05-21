@@ -16,16 +16,16 @@ namespace Assets.Scripts
             set
             {
                 attack = value;
-                this._text.text = attack.ToString();
+                _text.text = attack.ToString();
             }
         }
 
         public void Init(UnitController unitController)
         {
-            this._unitController = unitController;
+            _unitController = unitController;
             GameObject attackPrefab = Resources.Load("Prefabs/Attack", typeof(GameObject)) as GameObject;
             Transform attackTransform = GameObject.Instantiate(attackPrefab).transform;
-            this._text = attackTransform.GetComponent<Text>();
+            _text = attackTransform.GetComponent<Text>();
         }
 
         public bool HasAttack()

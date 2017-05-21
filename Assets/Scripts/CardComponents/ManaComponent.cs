@@ -16,16 +16,16 @@ namespace Assets.Scripts
             set
             {
                 mana = value;
-                this._text.text = mana.ToString();
+                _text.text = mana.ToString();
             }
         }
 
         public void Init(UnitController unitController)
         {
-            this._unitController = unitController;
+            _unitController = unitController;
             GameObject manaPrefab = Resources.Load("Prefabs/Mana", typeof(GameObject)) as GameObject;
             Transform manaTransform = GameObject.Instantiate(manaPrefab).transform;
-            this._text = manaTransform.GetComponent<Text>();
+            _text = manaTransform.GetComponent<Text>();
         }
     }
 }
